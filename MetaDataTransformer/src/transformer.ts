@@ -85,7 +85,7 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
         const type = ts.createTypeReferenceNode(declaration.name, []);
         const modifiers = [ 
             ts.createModifier(ts.SyntaxKind.StaticKeyword), 
-            ts.createModifier(ts.SyntaxKind.PublicKeyword) 
+            ts.createModifier(ts.SyntaxKind.PublicKeyword),
         ];
         const returnObject = createDeclarations(declaration);
 

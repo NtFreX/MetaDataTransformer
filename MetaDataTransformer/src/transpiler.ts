@@ -31,7 +31,7 @@ const toAbsolute = (location: string, rootPath: string): string => {
     return path.join(rootPath, location);
 };
 
-const toEnumValue = (type: any, value: string): number => {
+const toEnumValue = (type: { [id: number]: string }, value: string): number => {
     if(isNullOrUndefined(value) || value == "") {
         return null;
     } 

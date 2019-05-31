@@ -4,4 +4,3 @@ import { CommandLine } from "./commandline";
 
 const commandLine: CommandLine = new CommandLine();
 commandLine.execute(process.argv.slice(2));
-
