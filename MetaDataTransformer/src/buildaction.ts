@@ -32,16 +32,16 @@ export class BuildAction extends CommandLineAction {
     protected onExecute(): Promise<void> {
         const options: BuildOptions = 
         {
-            pattern: this._pattern.value,
-            rootDir: this._rootDir.value,
-            outDir: this._outDir.value,
-            outFile: this._outFile.value,
             mapRoot: this._mapRoot.value,
             module: this._module.value,
             moduleResolution: this._moduleResolution.value,
+            outDir: this._outDir.value,
+            outFile: this._outFile.value,
+            pattern: this._pattern.value,
+            rootDir: this._rootDir.value,
             sourceMap: this._sourceMap.value,
             sourceRoot: this._sourceRoot.value,
-            target: this._target.value
+            target: this._target.value,
         };
 
         Logger.log(`BuildOptions: '${options}'`);

@@ -12,8 +12,8 @@ class Test implements ITest {
     protected static value: number;
     
     public id: number;
-    description?: string;
-    friendlyName!: string;
+    description?: string;   // tslint:disable-line
+    friendlyName!: string;  // tslint:disable-line
 
     protected inner: string;
 

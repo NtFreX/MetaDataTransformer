@@ -17,8 +17,8 @@ interface PropertyDeclaration {
     isStatic: boolean;
     accessModifier: AccessModifier;
 }
-interface MethodDeclaration { }
-interface ConstructorDeclarations { }
+//interface MethodDeclaration { }
+//interface ConstructorDeclarations { }
 
 export const metadataTransformer = <T extends ts.Node>(context: ts.TransformationContext): ts.Transformer<T> => {
 
@@ -43,8 +43,8 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
         return [ node, ...[].concat(...node.getChildren().map(flattenChildren))];
     };
 
-    const createMethodDeclarations = (declaration: ts.ClassDeclaration): MethodDeclaration[] => [];
-    const createConstructorDeclarations = (declaration: ts.ClassDeclaration): ConstructorDeclarations[] => [];
+    //const createMethodDeclarations = (declaration: ts.ClassDeclaration): MethodDeclaration[] => [];
+    //const createConstructorDeclarations = (declaration: ts.ClassDeclaration): ConstructorDeclarations[] => [];
     const createPropertyDeclarations = (declaration: ts.ClassDeclaration): PropertyDeclaration[] => {
         return declaration.members
             .filter(member => ts.isPropertyDeclaration(member))
@@ -64,14 +64,15 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
 
     const createDeclarations = (declaration: ts.ClassDeclaration): ts.ObjectLiteralExpression => {
         const propertyDeclarations = createPropertyDeclarations(declaration);
-        const properties = propertyDeclarations.map(dec => ts.createPropertyAssignment(dec.name, ts.createObjectLiteral([
-            ts.createPropertyAssignment("isOptional", ts.createLiteral(dec.isOptional)),
-            ts.createPropertyAssignment("isStatic", ts.createLiteral(dec.isStatic)),
-            ts.createPropertyAssignment("accessModifier", ts.createLiteral(dec.accessModifier)),
+        const properties = propertyDeclarations.map(dec => 
+            ts.createPropertyAssignment(dec.name, ts.createObjectLiteral([
+                ts.createPropertyAssignment("isOptional", ts.createLiteral(dec.isOptional)),
+                ts.createPropertyAssignment("isStatic", ts.createLiteral(dec.isStatic)),
+                ts.createPropertyAssignment("accessModifier", ts.createLiteral(dec.accessModifier)),
         ])));
 
-        const methodDeclarations = createMethodDeclarations(declaration);
-        const constructorDeclarations = createConstructorDeclarations(declaration);
+        //const methodDeclarations = createMethodDeclarations(declaration);
+        //const constructorDeclarations = createConstructorDeclarations(declaration);
 
         return ts.createObjectLiteral([
             ts.createPropertyAssignment('properties', ts.createObjectLiteral(properties)),
@@ -82,7 +83,10 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
 
     const createDeclartionMethod = (declaration: ts.ClassDeclaration): ts.MethodDeclaration => {
         const type = ts.createTypeReferenceNode(declaration.name, []);
-        const modifiers = [ ts.createModifier(ts.SyntaxKind.StaticKeyword), ts.createModifier(ts.SyntaxKind.PublicKeyword) ];
+        const modifiers = [ 
+            ts.createModifier(ts.SyntaxKind.StaticKeyword), 
+            ts.createModifier(ts.SyntaxKind.PublicKeyword),
+        ];
         const returnObject = createDeclarations(declaration);
 
         return ts.createMethod(
