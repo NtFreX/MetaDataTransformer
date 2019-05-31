@@ -9,12 +9,12 @@ import { isNullOrUndefined } from 'util';
 
 const emptyCancellationToken: ts.CancellationToken = {
     isCancellationRequested: () => false,
-    throwIfCancellationRequested: () => { }
+    throwIfCancellationRequested: () => { },
 };
 
 const transformers: ts.CustomTransformers = {
-    before: [metadataTransformer],
     after: [],
+    before: [metadataTransformer],
 };
 
 const emitOnlyDtsFiles = false;
@@ -36,13 +36,13 @@ export const build = (pattern: string, outDir: string, outFile: string, rootDir:
         outDir: toAbsolute(outDir, rootDir),
         outFile: toAbsolute(outFile, rootDir),
         rootDir: rootDir,
-
+        
+        mapRoot: mapRoot,
         module: (isNullOrUndefined(module) || module == "") ? null : ts.ModuleKind[module],
         moduleResolution: (isNullOrUndefined(moduleResolution) || moduleResolution == "") ? null : ts.ModuleResolutionKind[moduleResolution],
-        target: (isNullOrUndefined(target) || target == "") ? null : ts.ScriptTarget[target],
         sourceMap: sourceMap,
         sourceRoot: sourceRoot,
-        mapRoot: mapRoot
+        target: (isNullOrUndefined(target) || target == "") ? null : ts.ScriptTarget[target],
     };
     
     const compilerHost = ts.createCompilerHost(options);

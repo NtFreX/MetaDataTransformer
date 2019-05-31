@@ -7,7 +7,7 @@ export enum AccessModifier {
 }
 
 export interface IClassDeclaration {
-    properties: { [id: string] : IPropertyDeclaration }
+    properties: { [id: string]: IPropertyDeclaration }
 }
 
 export interface IPropertyDeclaration {
@@ -17,10 +17,6 @@ export interface IPropertyDeclaration {
 }
 
 export const reflection = {
-    isType: (type: Function): boolean => {
-        const fnc = (type as any).getDeclartion;
-        return !isNullOrUndefined(fnc) && typeof fnc === 'function';
-    },
     getTypeDeclaration: (type: Function): IClassDeclaration => {
         if(reflection.isType(type)) {
             const fnc = (type as any).getDeclartion;
@@ -39,5 +35,9 @@ export const reflection = {
         }
     
         return true;    
+    },
+    isType: (type: Function): boolean => {
+        const fnc = (type as any).getDeclartion;
+        return !isNullOrUndefined(fnc) && typeof fnc === 'function';
     }
 };
