@@ -13,13 +13,13 @@ This project is not stable and there are no plans to support the same features a
 
 ## Prerequisites
 
-- node js
+* node js
 
 ## How to run
 
-- Open the path "MetaDataTransformer/MetaDataTransformerUsage" in a command line terminal
-- Run `npm run pack`
-- Open "MetaDataTransformer/MetaDataTransformerUsage/test.html" in a browser and take a look at the console output
+* Open the path "MetaDataTransformer/MetaDataTransformerUsage" in a command line terminal
+* Run `npm run pack`
+* Open "MetaDataTransformer/MetaDataTransformerUsage/test.html" in a browser and take a look at the console output
 
 ## CLI
 
