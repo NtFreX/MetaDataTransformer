@@ -31,23 +31,43 @@ const toAbsolute = (location: string, rootPath: string): string => {
     return path.join(rootPath, location);
 };
 
-export const build = (pattern: string, outDir: string, outFile: string, rootDir: string, module: string, moduleResolution: string, target: string, sourceMap: boolean, sourceRoot: string, mapRoot: string): ts.Program => {
+const toEnumValue = (type: any, value: string): number => {
+    if(isNullOrUndefined(value) || value == "") {
+        return null;
+    } 
+    
+    return type[value];
+}
+
+export class BuildOptions {
+    public pattern: string;
+    public outDir?: string;
+    public outFile?: string;
+    public rootDir?: string;
+    public module?: string;
+    public moduleResolution?: string;
+    public target?: string;
+    public sourceMap?: boolean;
+    public sourceRoot?: string;
+    public mapRoot?: string;
+}
+
+export const build = (buildOptions: BuildOptions): ts.Program => {
     const options: ts.CompilerOptions = {
-        outDir: toAbsolute(outDir, rootDir),
-        outFile: toAbsolute(outFile, rootDir),
-        rootDir: rootDir,
-        
-        mapRoot: mapRoot,
-        module: (isNullOrUndefined(module) || module == "") ? null : ts.ModuleKind[module],
-        moduleResolution: (isNullOrUndefined(moduleResolution) || moduleResolution == "") ? null : ts.ModuleResolutionKind[moduleResolution],
-        sourceMap: sourceMap,
-        sourceRoot: sourceRoot,
-        target: (isNullOrUndefined(target) || target == "") ? null : ts.ScriptTarget[target],
+        mapRoot: buildOptions.mapRoot,
+        module: toEnumValue(ts.ModuleKind, buildOptions.module),
+        moduleResolution: toEnumValue(ts.ModuleResolutionKind, buildOptions.moduleResolution),
+        outDir: toAbsolute(buildOptions.outDir, buildOptions.rootDir),
+        outFile: toAbsolute(buildOptions.outFile, buildOptions.rootDir),
+        rootDir: buildOptions.rootDir,
+        sourceMap: buildOptions.sourceMap,
+        sourceRoot: buildOptions.sourceRoot,
+        target: toEnumValue(ts.ScriptTarget, buildOptions.target),
     };
     
     const compilerHost = ts.createCompilerHost(options);
 
-    const files = glob.sync(pattern,  { root: rootDir });
+    const files = glob.sync(buildOptions.pattern,  { root: buildOptions.rootDir });
     Logger.log("Found files to transpile:")
     Logger.log(files);
 

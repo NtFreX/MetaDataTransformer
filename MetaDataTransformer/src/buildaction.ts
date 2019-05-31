@@ -1,8 +1,12 @@
 import * as ts from 'typescript';
 
-import { CommandLineStringParameter, CommandLineAction, CommandLineChoiceParameter, CommandLineFlagParameter } from '@microsoft/ts-command-line';
+import { 
+    CommandLineStringParameter, 
+    CommandLineAction, 
+    CommandLineChoiceParameter, 
+    CommandLineFlagParameter } from '@microsoft/ts-command-line';
 
-import { build, emit } from "./transpiler";
+import { build, emit, BuildOptions } from "./transpiler";
 import { Logger } from './logger';
 
 export class BuildAction extends CommandLineAction {
@@ -26,28 +30,23 @@ export class BuildAction extends CommandLineAction {
     }
    
     protected onExecute(): Promise<void> {
-        Logger.log(`Pattern: '${this._pattern.value}'`);
-        Logger.log(`RootDir: '${this._rootDir.value}'`);
-        Logger.log(`OutDir: '${this._outDir.value}'`);
-        Logger.log(`OutFile: '${this._outFile.value}'`);
-        Logger.log(`Module: '${this._module.value}'`);
-        Logger.log(`ModuleResolution: '${this._moduleResolution.value}'`);
-        Logger.log(`Target: '${this._target.value}'`);
-        Logger.log(`SourceMap: '${this._sourceMap.value}'`);
-        Logger.log(`SourceRoot: ${this._sourceRoot.value}`)
-        Logger.log(`MapRoot: ${this._mapRoot.value}`);
+        const options: BuildOptions = 
+        {
+            pattern: this._pattern.value,
+            rootDir: this._rootDir.value,
+            outDir: this._outDir.value,
+            outFile: this._outFile.value,
+            mapRoot: this._mapRoot.value,
+            module: this._module.value,
+            moduleResolution: this._moduleResolution.value,
+            sourceMap: this._sourceMap.value,
+            sourceRoot: this._sourceRoot.value,
+            target: this._target.value
+        };
 
-        const program = build(
-            this._pattern.value, 
-            this._outDir.value, 
-            this._outFile.value, 
-            this._rootDir.value, 
-            this._module.value, 
-            this._moduleResolution.value,
-            this._target.value,
-            this._sourceMap.value,
-            this._sourceRoot.value,
-            this._mapRoot.value);
+        Logger.log(`BuildOptions: '${options}'`);
+
+        const program = build(options);
         const result = emit(program);
 
         if(result.emitSkipped) {
@@ -100,21 +99,21 @@ export class BuildAction extends CommandLineAction {
             required: false,
         });
         this._module = this.defineChoiceParameter({
-            alternatives: [ 'None', 'CommonJS', 'AMD', 'UMD', 'System', 'ES2015', 'ESNext', ],
+            alternatives: [ 'None', 'CommonJS', 'AMD', 'UMD', 'System', 'ES2015', 'ESNext' ],
             defaultValue: 'None',
             description: 'The module',
-            required: false,
             parameterLongName: '--module',
+            required: false,
         });
         this._moduleResolution = this.defineChoiceParameter({
             alternatives: [ 'Classic', 'NodeJs' ],
             defaultValue: 'Classic',
             description: 'The module',
             parameterLongName: '--module-resolution',
-            required: false
+            required: false,
         });
         this._target = this.defineChoiceParameter({
-            alternatives: [ 'ES3', 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ESNext', 'JSON', 'Latest', ],
+            alternatives: [ 'ES3', 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ESNext', 'JSON', 'Latest' ],
             defaultValue: 'ES5',
             description: 'The target',
             parameterLongName: '--target',

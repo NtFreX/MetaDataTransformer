@@ -16,10 +16,14 @@ export interface IPropertyDeclaration {
     accessModifier: AccessModifier;
 }
 
+interface IType {
+    getDeclartion: () => IClassDeclaration;
+}
+
 export const reflection = {
     getTypeDeclaration: (type: Function): IClassDeclaration => {
         if(reflection.isType(type)) {
-            const fnc = (type as any).getDeclartion;
+            const fnc = ((type as unknown) as IType).getDeclartion;
             return fnc();
         }
         throw 'The given object seems to be no type.';
@@ -37,7 +41,7 @@ export const reflection = {
         return true;    
     },
     isType: (type: Function): boolean => {
-        const fnc = (type as any).getDeclartion;
+        const fnc = ((type as unknown) as IType).getDeclartion;
         return !isNullOrUndefined(fnc) && typeof fnc === 'function';
-    }
+    },
 };
