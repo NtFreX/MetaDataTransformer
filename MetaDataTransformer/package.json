@@ -9,7 +9,7 @@
         "typescript": "~3.5"
     },
     "scripts": {
-        "start": "npm run build && node dist/executable-index.js",
+        "start": "node dist/executable-index.js",
         "rebuild": "npm run clean && npm run build",
         "build": "npm run restore && (if exist .\\tsc.cmd (.\\tsc.cmd) else (.\\node_modules\\.bin\\tsc.cmd))",
         "restore": "npm install",

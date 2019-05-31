@@ -17,5 +17,6 @@ steps:
 
 - script: |
     cd MetaDataTransformerUsage
+    npm run clean
     npm run pack
   displayName: 'npm pack'

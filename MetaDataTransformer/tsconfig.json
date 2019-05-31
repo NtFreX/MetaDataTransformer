@@ -6,7 +6,8 @@
       "outDir": "./dist",
       "sourceMap": true,
       "sourceRoot": "./../../../node_modules/metadatatransformer/src",
-      "mapRoot": "./../../../node_modules/metadatatransformer/dist/"
+      "mapRoot": "./../../../node_modules/metadatatransformer/dist/",
+      "declaration": true
     },
     "include": [
         "src/**/*"
