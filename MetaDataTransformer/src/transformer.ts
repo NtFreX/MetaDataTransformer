@@ -17,12 +17,8 @@ interface PropertyDeclaration {
     isStatic: boolean;
     accessModifier: AccessModifier;
 }
-interface MethodDeclaration {
-
-}
-interface ConstructorDeclarations {
-
-}
+interface MethodDeclaration { }
+interface ConstructorDeclarations { }
 
 export const metadataTransformer = <T extends ts.Node>(context: ts.TransformationContext): ts.Transformer<T> => {
 
@@ -58,10 +54,10 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
                 const children = flattenChildren(member);
 
                 return {
-                    name: member.name.getText(),
-                    isOptional: !isNullOrUndefined(member.questionToken),
                     accessModifier: getAccessModifier(children),
-                    isStatic: isStatic(children)
+                    isOptional: !isNullOrUndefined(member.questionToken),
+                    isStatic: isStatic(children),
+                    name: member.name.getText(),                    
                 } as PropertyDeclaration;
             });
     };
@@ -71,7 +67,7 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
         const properties = propertyDeclarations.map(dec => ts.createPropertyAssignment(dec.name, ts.createObjectLiteral([
             ts.createPropertyAssignment("isOptional", ts.createLiteral(dec.isOptional)),
             ts.createPropertyAssignment("isStatic", ts.createLiteral(dec.isStatic)),
-            ts.createPropertyAssignment("accessModifier", ts.createLiteral(dec.accessModifier))
+            ts.createPropertyAssignment("accessModifier", ts.createLiteral(dec.accessModifier)),
         ])));
 
         const methodDeclarations = createMethodDeclarations(declaration);
@@ -80,7 +76,7 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
         return ts.createObjectLiteral([
             ts.createPropertyAssignment('properties', ts.createObjectLiteral(properties)),
             ts.createPropertyAssignment('methods', ts.createObjectLiteral()),
-            ts.createPropertyAssignment('constructors', ts.createObjectLiteral())
+            ts.createPropertyAssignment('constructors', ts.createObjectLiteral()),
         ]);
     };
 
@@ -98,7 +94,7 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
             /*typeParameters*/ [],
             /*parameters*/ [],
             /*type*/ type,
-            /*block*/ ts.createBlock([ ts.createReturn(returnObject) ])
+            /*block*/ ts.createBlock([ ts.createReturn(returnObject) ]),
         );
     };
 

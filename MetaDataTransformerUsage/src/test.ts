@@ -7,16 +7,17 @@ interface ITest {
 }
 
 class Test implements ITest {
+    public static nr: number;
+
+    protected static value: number;
+    
     public id: number;
     description?: string;
     friendlyName!: string;
 
-    private field: boolean;
-
-    public static nr: number;
     protected inner: string;
 
-    protected static value: number;
+    private field: boolean;
 }
 
 if(reflection.isType(Test)) {
