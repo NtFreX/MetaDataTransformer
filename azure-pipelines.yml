@@ -19,4 +19,5 @@ steps:
     cd MetaDataTransformerUsage
     npm run clean
     npm run pack
+    npm run test
   displayName: 'npm pack'

@@ -7,7 +7,7 @@
         "build": "npm --prefix ./../MetaDataTransformer run build && npm run restore && npm --prefix ./../MetaDataTransformer run start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map --source-root=\".\\..\\..\\..\\..\" --map-root=\".\\..\"",
         "restore": "npm install && npm link .\\..\\MetaDataTransformer",
         "clean": "(npm --prefix ./../MetaDataTransformer run clean) && (if exist node_modules rmdir node_modules /q /s) && (if exist dist rmdir dist /q /s) && (if exist package-lock.json del -f -q package-lock.json) && (if exist test_out rmdir test_out /q /s)",
-        "test": "npm run clean && npm --prefix ./../MetaDataTransformer run build && npm run restore && npm --prefix ./../MetaDataTransformer run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" && jest .test.js"
+        "test": "npm --prefix ./../MetaDataTransformer run build && npm run restore && npm --prefix ./../MetaDataTransformer run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" && jest .test.js"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
