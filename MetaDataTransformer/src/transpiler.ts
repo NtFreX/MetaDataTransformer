@@ -14,7 +14,7 @@ const emptyCancellationToken: ts.CancellationToken = {
 
 const transformers: ts.CustomTransformers = {
     before: [metadataTransformer],
-    after: []
+    after: [],
 };
 
 const emitOnlyDtsFiles = false;
@@ -33,9 +33,9 @@ const toAbsolute = (location: string, rootPath: string): string => {
 
 export const build = (pattern: string, outDir: string, outFile: string, rootDir: string, module: string, moduleResolution: string, target: string, sourceMap: boolean, sourceRoot: string, mapRoot: string): ts.Program => {
     const options: ts.CompilerOptions = {
-        rootDir: rootDir,
         outDir: toAbsolute(outDir, rootDir),
         outFile: toAbsolute(outFile, rootDir),
+        rootDir: rootDir,
 
         module: (isNullOrUndefined(module) || module == "") ? null : ts.ModuleKind[module],
         moduleResolution: (isNullOrUndefined(moduleResolution) || moduleResolution == "") ? null : ts.ModuleResolutionKind[moduleResolution],

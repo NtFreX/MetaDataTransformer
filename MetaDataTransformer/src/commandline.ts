@@ -9,8 +9,8 @@ export class CommandLine extends CommandLineParser {
    
     public constructor() {
         super({
-            toolFilename: 'tsca',
-            toolDescription: 'Typescript transpiler with reflection capabilities.'
+            toolDescription: 'Typescript transpiler with reflection capabilities.',
+            toolFilename: 'tsca'
         });
 
         this.addAction(new BuildAction());
@@ -46,8 +46,8 @@ class BuildAction extends CommandLineAction {
     public constructor() {
       super({
         actionName: 'build',
-        summary: 'Transpiles the given typescript files',
-        documentation: 'Transpiles the given typescript files'
+        documentation: 'Transpiles the given typescript files',
+        summary: 'Transpiles the given typescript files'
       });
     }
    
@@ -130,14 +130,14 @@ class BuildAction extends CommandLineAction {
             defaultValue: 'None',
             parameterLongName: '--module',
             description: 'The module',
-            alternatives: [ 'None', 'CommonJS', 'AMD', 'UMD', 'System', 'ES2015', 'ESNext' ]
+            alternatives: [ 'None', 'CommonJS', 'AMD', 'UMD', 'System', 'ES2015', 'ESNext', ]
         });
         this._moduleResolution = this.defineChoiceParameter({
-            required: false,
+            alternatives: [ 'Classic', 'NodeJs' ],
             defaultValue: 'Classic',
-            parameterLongName: '--module-resolution',
             description: 'The module',
-            alternatives: [ 'Classic', 'NodeJs' ]
+            parameterLongName: '--module-resolution',
+            required: false
         });
         this._target = this.defineChoiceParameter({
             required: false,
@@ -159,8 +159,8 @@ class BuildAction extends CommandLineAction {
         });
         this._mapRoot = this.defineStringParameter({ 
             argumentName: "MAPROOT",
-            parameterLongName: '--map-root',
             description: 'The map root',
+            parameterLongName: '--map-root',            
             required: false
         });
     }

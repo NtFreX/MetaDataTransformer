@@ -61,7 +61,7 @@ export const metadataTransformer = <T extends ts.Node>(context: ts.Transformatio
                     name: member.name.getText(),
                     isOptional: !isNullOrUndefined(member.questionToken),
                     accessModifier: getAccessModifier(children),
-                    isStatic: isStatic(children)
+                    isStatic: isStatic(children),
                 } as PropertyDeclaration;
             });
     };

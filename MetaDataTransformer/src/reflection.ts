@@ -3,7 +3,7 @@ import { isNullOrUndefined } from "util";
 export enum AccessModifier {
     Public,
     Protected,
-    Private
+    Private,
 }
 
 export interface IClassDeclaration {
@@ -28,10 +28,10 @@ export const reflection = {
         }
         throw 'The given object seems to be no type.';
     },
-    isObjectValid: (obj: any, type: Function): boolean => {
+    isObjectValid: (obj: object, type: Function): boolean => {
         const declartion = reflection.getTypeDeclaration(type);
         
-        for(let propertyName in declartion.properties) {
+        for(const propertyName in declartion.properties) {
             const property = declartion.properties[propertyName];
             if(!property.isOptional && !Object.keys(obj).some(key => key === propertyName)) {
                 return false;
