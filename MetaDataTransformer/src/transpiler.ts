@@ -50,6 +50,7 @@ export class BuildOptions {
     public sourceMap?: boolean;
     public sourceRoot?: string;
     public mapRoot?: string;
+    public types?: string[];
 }
 
 export const build = (buildOptions: BuildOptions): ts.Program => {
@@ -63,6 +64,7 @@ export const build = (buildOptions: BuildOptions): ts.Program => {
         sourceMap: buildOptions.sourceMap,
         sourceRoot: buildOptions.sourceRoot,
         target: toEnumValue(ts.ScriptTarget, buildOptions.target),
+        types: buildOptions.types,
     };
     
     const compilerHost = ts.createCompilerHost(options);

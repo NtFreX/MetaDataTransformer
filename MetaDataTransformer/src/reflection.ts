@@ -6,7 +6,7 @@ export enum AccessModifier {
     Private,
 }
 
-export interface IClassDeclaration {
+export interface ITypeDeclaration {
     properties: { [id: string]: IPropertyDeclaration }
 }
 
@@ -20,19 +20,19 @@ export interface IType<T> extends Function {
     new (...args: any[]): T;
 }
 interface ICompleteType<T> extends IType<T> {
-    getDeclartion: () => IClassDeclaration;
+    getDeclartion: () => ITypeDeclaration;
 }
 
 export const reflection = {
-    getTypeDeclaration: <T>(type: IType<T>): IClassDeclaration => {
+    getType: <T>(type: IType<T>): ITypeDeclaration => {
         if(reflection.isType(type)) {
             const completeType = type as ICompleteType<T>;
             return completeType.getDeclartion();
         }
         throw 'The given object seems to be no type.';
     },
-    isObjectValid: <T>(obj: object, type: IType<T>): boolean => {
-        const declartion = reflection.getTypeDeclaration(type);
+    canCast: <T>(obj: object, type: IType<T>): boolean => {
+        const declartion = reflection.getType(type);
         
         for(const propertyName in declartion.properties) {
             const property = declartion.properties[propertyName];

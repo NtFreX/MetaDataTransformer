@@ -4,7 +4,8 @@ import {
     CommandLineStringParameter, 
     CommandLineAction, 
     CommandLineChoiceParameter, 
-    CommandLineFlagParameter } from '@microsoft/ts-command-line';
+    CommandLineFlagParameter, 
+    CommandLineStringListParameter} from '@microsoft/ts-command-line';
 
 import { build, emit, BuildOptions } from "./transpiler";
 import { Logger } from './logger';
@@ -20,6 +21,7 @@ export class BuildAction extends CommandLineAction {
     private _sourceMap: CommandLineFlagParameter;
     private _sourceRoot: CommandLineStringParameter;
     private _mapRoot: CommandLineStringParameter;
+    private _types: CommandLineStringListParameter;
 
     public constructor() {
       super({
@@ -42,6 +44,7 @@ export class BuildAction extends CommandLineAction {
             sourceMap: this._sourceMap.value,
             sourceRoot: this._sourceRoot.value,
             target: this._target.value,
+            types: [ ...this._types.values ],
         };
 
         Logger.log(`BuildOptions: '${options}'`);
@@ -134,6 +137,12 @@ export class BuildAction extends CommandLineAction {
             argumentName: "MAPROOT",
             description: 'The map root',
             parameterLongName: '--map-root',            
+            required: false,
+        });
+        this._types = this.defineStringListParameter({
+            argumentName: 'TYPES',
+            description: 'The types',
+            parameterLongName: '--types',
             required: false,
         });
     }

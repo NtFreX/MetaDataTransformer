@@ -21,9 +21,9 @@ class Test implements ITest {
 }
 
 if(reflection.isType(Test)) {
-    console.log(reflection.getTypeDeclaration(Test));
-    console.log(reflection.isObjectValid({ id: 12, friendlyName: 'test' }, Test));
-    console.log(reflection.isObjectValid({ id: 12 }, Test));
-    console.log(reflection.isObjectValid({ friendlyName: 'test' }, Test));
-    console.log(reflection.isObjectValid({ id: 12, friendlyName: 'test', description: 'This is a test object' }, Test));
+    console.log(reflection.getType(Test));
+    console.log(reflection.canCast({ id: 12, friendlyName: 'test' }, Test));
+    console.log(reflection.canCast({ id: 12 }, Test));
+    console.log(reflection.canCast({ friendlyName: 'test' }, Test));
+    console.log(reflection.canCast({ id: 12, friendlyName: 'test', description: 'This is a test object' }, Test));
 }
