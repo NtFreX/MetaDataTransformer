@@ -2,5 +2,5 @@ language: node_js
 os: windows
 node_js: "11"
 
-before_script: cd MetaDataTransformerUsage
-script: npm run pack
+before_script: cd MetaDataTransformerUsage && npm run clean
+script: npm run pack && npm run test && cd ../MetaDataTransformer/ && npm run test

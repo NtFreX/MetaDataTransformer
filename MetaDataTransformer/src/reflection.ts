@@ -6,7 +6,7 @@ export enum AccessModifier {
     Private,
 }
 
-export interface IClassDeclaration {
+export interface ITypeDeclaration {
     properties: { [id: string]: IPropertyDeclaration }
 }
 
@@ -16,20 +16,16 @@ export interface IPropertyDeclaration {
     accessModifier: AccessModifier;
 }
 
-interface IType {
-    getDeclartion: () => IClassDeclaration;
+export interface IType<T> extends Function {
+    new (...args: (object | string | number | boolean)[]): T;
+}
+interface ICompleteType<T> extends IType<T> {
+    getDeclartion: () => ITypeDeclaration;
 }
 
 export const reflection = {
-    getTypeDeclaration: (type: Function): IClassDeclaration => {
-        if(reflection.isType(type)) {
-            const fnc = ((type as unknown) as IType).getDeclartion;
-            return fnc();
-        }
-        throw 'The given object seems to be no type.';
-    },
-    isObjectValid: (obj: object, type: Function): boolean => {
-        const declartion = reflection.getTypeDeclaration(type);
+    canCast: <T>(obj: object, type: IType<T>): boolean => {
+        const declartion = reflection.getType(type);
         
         for(const propertyName in declartion.properties) {
             const property = declartion.properties[propertyName];
@@ -40,8 +36,16 @@ export const reflection = {
     
         return true;    
     },
-    isType: (type: Function): boolean => {
-        const fnc = ((type as unknown) as IType).getDeclartion;
+    getType: <T>(type: IType<T>): ITypeDeclaration => {
+        if(reflection.isType(type)) {
+            const completeType = type as ICompleteType<T>;
+            return completeType.getDeclartion();
+        }
+        throw 'The given object seems to be no type.';
+    },
+    isType: <T>(type: IType<T>): boolean => {
+        const completeType = type as ICompleteType<T>;
+        const fnc = !isNullOrUndefined(completeType) ? completeType.getDeclartion : null;
         return !isNullOrUndefined(fnc) && typeof fnc === 'function';
     },
 };
