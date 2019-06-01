@@ -2,7 +2,14 @@
     "name": "ntfrex",
     "version": "0.0.1",
     "scripts": {
-        "test": "npm install && cd ./MetaDataTransformer/ && npm run build && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map && cd ./../MetaDataTransformerUsage/ && npm run build && cd ./../MetaDataTransformer/ && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map && cd ./../ && jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
+        "test": "npm run test:prepare && npm run test:build && npm run test:start",
+        "test:prepare": "npm install && npm run test:prepare:main && npm run test:prepare:app",
+        "test:prepare:main": "cd ./MetaDataTransformer/ && npm run build",
+        "test:prepare:app": "cd ./MetaDataTransformerUsage/ && npm run build",
+        "test:build": "npm run test:build:main && npm run test:build:app",
+        "test:build:main": "cd ./MetaDataTransformer/ && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map",
+        "test:build:app": "cd ./MetaDataTransformer/ && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map",
+        "test:start": "jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
     },
     "devDependencies": {
         "coveralls": "^3.0.3",

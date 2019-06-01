@@ -17,8 +17,14 @@
         "rebuild": "npm run clean && npm run build",
         "build": "npm run restore && tsc",
         "restore": "npm install",
-        "clean": "(if exist node_modules rmdir node_modules /q /s) && (if exist dist rmdir dist /q /s) && (if exist package-lock.json del -f -q package-lock.json) && (if exist test_out rmdir test_out /q /s)",
-        "test": "npm run build && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" && jest .test.js --coverage --coverageReporters=text"
+        "clean": "npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out",
+        "clean:node_modules": "if exist node_modules rmdir node_modules /q /s",
+        "clean:dist": "if exist dist rmdir dist /q /s",
+        "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
+        "clean:test_out": "if exist test_out rmdir test_out /q /s",
+        "test": "npm run build && npm run test:build && npm run test:start",
+        "test:build": "npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\"",
+        "test:start": "jest .test.js --coverage --coverageReporters=text"
     },
     "main": "./dist/index.js",
     "bin": {
