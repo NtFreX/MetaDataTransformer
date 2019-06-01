@@ -7,10 +7,12 @@
         "build": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map --source-root=\".\\..\\..\\..\\..\" --map-root=\".\\..\" && cd ./../MetaDataTransformerUsage",
         "restore": "npm install && npm link .\\..\\MetaDataTransformer",
         "clean": "(cd ./../MetaDataTransformer) && (npm run clean) && (cd ./../MetaDataTransformerUsage) && (if exist node_modules rmdir node_modules /q /s) && (if exist dist rmdir dist /q /s) && (if exist package-lock.json del -f -q package-lock.json) && (if exist test_out rmdir test_out /q /s)",
-        "test": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" && cd ./../MetaDataTransformerUsage && jest .test.js"
+        "test": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" && cd ./../MetaDataTransformerUsage && jest .test.js --coverage --coverageReporters=text",
+        "test-coveralls": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map && cd ./../MetaDataTransformerUsage && jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
+        "coveralls": "^3.0.3",
         "jest": "^24.8.0",
         "sorcery": "^0.10.0",
         "webpack": "^4.32.2",

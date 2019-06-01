@@ -11,6 +11,7 @@ import { build, emit, BuildOptions } from "./transpiler";
 import { Logger } from './logger';
 
 export class BuildAction extends CommandLineAction {
+    private _inlineSourceMap: CommandLineFlagParameter;
     private _pattern: CommandLineStringParameter;
     private _outDir: CommandLineStringParameter;
     private _outFile: CommandLineStringParameter;
@@ -34,6 +35,7 @@ export class BuildAction extends CommandLineAction {
     protected onExecute(): Promise<void> {
         const options: BuildOptions = 
         {
+            inlineSourceMap: this._inlineSourceMap.value,
             mapRoot: this._mapRoot.value,
             module: this._module.value,
             moduleResolution: this._moduleResolution.value,
@@ -77,6 +79,11 @@ export class BuildAction extends CommandLineAction {
     }
    
     protected onDefineParameters(): void {     
+        this._inlineSourceMap = this.defineFlagParameter({
+            description: 'Should create inline source maps',
+            parameterLongName: '--inline-source-map',            
+            required: false,
+        });
         this._pattern = this.defineStringParameter({
             argumentName: "PATTERN",
             description: 'The pattern which is used to locate the files to transpile',

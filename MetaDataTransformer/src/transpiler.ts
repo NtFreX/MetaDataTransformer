@@ -40,6 +40,7 @@ const toEnumValue = (type: { [id: number]: string }, value: string): number => {
 }
 
 export class BuildOptions {
+    public inlineSourceMap?: boolean;
     public pattern: string;
     public outDir?: string;
     public outFile?: string;
@@ -55,6 +56,7 @@ export class BuildOptions {
 
 export const build = (buildOptions: BuildOptions): ts.Program => {
     const options: ts.CompilerOptions = {
+        inlineSourceMap: buildOptions.inlineSourceMap,
         mapRoot: buildOptions.mapRoot,
         module: toEnumValue(ts.ModuleKind, buildOptions.module),
         moduleResolution: toEnumValue(ts.ModuleResolutionKind, buildOptions.moduleResolution),

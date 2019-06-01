@@ -10,6 +10,7 @@
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
+        "coveralls": "^3.0.3",
         "jest": "^24.8.0"
     },
     "scripts": {
@@ -18,7 +19,8 @@
         "build": "npm run restore && tsc",
         "restore": "npm install",
         "clean": "(if exist node_modules rmdir node_modules /q /s) && (if exist dist rmdir dist /q /s) && (if exist package-lock.json del -f -q package-lock.json) && (if exist test_out rmdir test_out /q /s)",
-        "test": "npm run build && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" && jest .test.js"
+        "test": "npm run build && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" && jest .test.js --coverage --coverageReporters=text",
+        "test-coveralls": "npm run build && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map && jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
     },
     "main": "./dist/index.js",
     "bin": {
