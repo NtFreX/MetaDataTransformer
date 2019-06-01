@@ -6,7 +6,7 @@ interface ITest {
     friendlyName: string;
 }
 
-class Test implements ITest {
+export class Test implements ITest {
     public static nr: number;
 
     protected static value: number;

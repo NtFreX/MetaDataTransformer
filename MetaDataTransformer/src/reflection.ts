@@ -17,20 +17,13 @@ export interface IPropertyDeclaration {
 }
 
 export interface IType<T> extends Function {
-    new (...args: any[]): T;
+    new (...args: (object | string | number | boolean)[]): T;
 }
 interface ICompleteType<T> extends IType<T> {
     getDeclartion: () => ITypeDeclaration;
 }
 
 export const reflection = {
-    getType: <T>(type: IType<T>): ITypeDeclaration => {
-        if(reflection.isType(type)) {
-            const completeType = type as ICompleteType<T>;
-            return completeType.getDeclartion();
-        }
-        throw 'The given object seems to be no type.';
-    },
     canCast: <T>(obj: object, type: IType<T>): boolean => {
         const declartion = reflection.getType(type);
         
@@ -42,6 +35,13 @@ export const reflection = {
         }
     
         return true;    
+    },
+    getType: <T>(type: IType<T>): ITypeDeclaration => {
+        if(reflection.isType(type)) {
+            const completeType = type as ICompleteType<T>;
+            return completeType.getDeclartion();
+        }
+        throw 'The given object seems to be no type.';
     },
     isType: <T>(type: IType<T>): boolean => {
         const completeType = type as ICompleteType<T>;
