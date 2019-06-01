@@ -3,4 +3,4 @@ os: windows
 node_js: "11"
 
 before_script: cd MetaDataTransformerUsage && npm run clean
-script: npm run pack && npm run test && cd ../MetaDataTransformer/ && npm run test
+script: npm run pack && npm run test-coveralls && cd ../MetaDataTransformer/ && npm run test-coveralls
