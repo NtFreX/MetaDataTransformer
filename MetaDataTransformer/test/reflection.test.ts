@@ -13,3 +13,10 @@ test('Class is a type', () => {
 
     expect(istType).toBeTruthy();
 });
+
+test('Class has one property', () => {
+    const type = reflection.getType(IHaveOnePublicPropertyWithTypeString);
+    const propertyNames = Object.keys(type.properties);
+
+    expect(propertyNames.length).toBe(1);
+});

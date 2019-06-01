@@ -6,4 +6,4 @@ declare const expect: Function;
 
 test('The test class exists', () => {
     expect(Test).toBeTruthy()
-})
+});
