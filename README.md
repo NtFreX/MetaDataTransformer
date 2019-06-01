@@ -2,7 +2,7 @@
 
 A typescript transpiler wrapper with reflection capabilities
 
-[![Build Status](https://travis-ci.org/NtFreX/MetaDataTransformer.svg?branch=master)](https://travis-ci.org/NtFreX/MetaDataTransformer)
+[![Build Status](https://travis-ci.com/NtFreX/MetaDataTransformer.svg?branch=master)](https://travis-ci.com/NtFreX/MetaDataTransformer)
 [![Build Status](https://dev.azure.com/ntfrex/MetaDataTransformer/_apis/build/status/NtFreX.MetaDataTransformer?branchName=master)](https://dev.azure.com/ntfrex/MetaDataTransformer/_build/latest?definitionId=1&branchName=master)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=NtFreX/MetaDataTransformer)](https://dependabot.com)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea59fba98f0d45288ed1a13d11c24049)](https://www.codacy.com/app/ntfrex/MetaDataTransformer?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NtFreX/MetaDataTransformer&amp;utm_campaign=Badge_Grade)
