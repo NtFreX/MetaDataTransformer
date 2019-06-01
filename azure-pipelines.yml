@@ -15,9 +15,5 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    cd MetaDataTransformerUsage
-    npm run clean
-    npm run pack
-    npm run test
+- script: cd MetaDataTransformerUsage && npm run clean && npm run pack && npm run test
   displayName: 'npm pack'
