@@ -2,5 +2,4 @@ language: node_js
 os: windows
 node_js: "11"
 
-before_script: cd MetaDataTransformerUsage && npm run clean
-script: npm run pack && npm run test-coveralls && cd ../ && npm run test
+script: npm run test
