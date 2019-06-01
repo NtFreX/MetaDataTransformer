@@ -1,0 +1,11 @@
+{
+    "name": "ntfrex",
+    "version": "0.0.1",
+    "scripts": {
+        "test": "npm install && cd ./MetaDataTransformer/ && npm run build && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map && cd ./../MetaDataTransformerUsage/ && npm run restore && cd ./../MetaDataTransformer/ && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map && cd ./../ && jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
+    },
+    "devDependencies": {
+        "coveralls": "^3.0.3",
+        "jest": "^24.8.0"
+    }
+}
