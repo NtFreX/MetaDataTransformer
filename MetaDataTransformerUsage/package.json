@@ -4,20 +4,20 @@
     "scripts": {
         "pack": "npm run build && webpack --mode=\"development\" --devtool source-map dist/src/main.js -o dist/bundle.js && sorcery -i dist/bundle.js",
         "rebuild": "npm run clean && npm run build",
-        "build": "npm run build:main && npm run build:restore && npm run build:start && cd ./../MetaDataTransformerUsage",
+        "build": "npm run build:main && npm run build:restore && npm run build:start",
         "build:main": "cd ./../MetaDataTransformer && npm run build",
-        "build:restore": "cd ./../MetaDataTransformerUsage && npm run restore",
+        "build:restore": "npm run restore",
         "build:start": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map --inline-source-map --source-root=\".\\..\\..\\..\\..\" --map-root=\".\\..\"",
         "restore": "npm install && npm link .\\..\\MetaDataTransformer",
         "clean": "npm run clean:main && npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out",
-        "clean:main": "cd ./../MetaDataTransformer && npm run clean && cd ./../MetaDataTransformerUsage",
+        "clean:main": "cd ./../MetaDataTransformer && npm run clean",
         "clean:node_modules": "if exist node_modules rmdir node_modules /q /s",
         "clean:dist": "if exist dist rmdir dist /q /s",
         "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "test": "npm run build:main && npm run build:restore && npm run test:build && npm run test:start",
-        "test:build": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\"",
-        "test:start": "cd ./../MetaDataTransformerUsage && jest .test.js --coverage --coverageReporters=text"
+        "test:build": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map --source-root=\".\\..\\..\\..\\..\" --map-root=\".\\..\"",
+        "test:start": "jest .test.js --coverageReporters=text"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",

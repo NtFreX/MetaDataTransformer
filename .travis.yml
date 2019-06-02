@@ -2,4 +2,4 @@ language: node_js
 os: windows
 node_js: "11"
 
-script: npm run test
+script: npm run test:coveralls

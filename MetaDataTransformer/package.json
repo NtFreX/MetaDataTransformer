@@ -23,8 +23,8 @@
         "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "test": "npm run build && npm run test:build && npm run test:start",
-        "test:build": "npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\"",
-        "test:start": "jest .test.js --coverage --coverageReporters=text"
+        "test:build": "npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map --source-root=\"./../../../\"",
+        "test:start": "jest .test.js --coverageReporters=text"
     },
     "main": "./dist/index.js",
     "bin": {

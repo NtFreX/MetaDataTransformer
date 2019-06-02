@@ -3,13 +3,17 @@
     "version": "0.0.1",
     "scripts": {
         "test": "npm run test:prepare && npm run test:build && npm run test:start",
+        "test:coveralls": "npm run test:prepare && npm run test:build && npm run test:start:coveralls",
+        "test:html": "npm run test:prepare && npm run test:build && npm run test:start:html",
         "test:prepare": "npm install && npm run test:prepare:main && npm run test:prepare:app",
         "test:prepare:main": "cd ./MetaDataTransformer/ && npm run build",
         "test:prepare:app": "cd ./MetaDataTransformerUsage/ && npm run build",
         "test:build": "npm run test:build:main && npm run test:build:app",
-        "test:build:main": "cd ./MetaDataTransformer/ && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map",
-        "test:build:app": "cd ./MetaDataTransformer/ && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map",
-        "test:start": "jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
+        "test:build:main": "cd ./MetaDataTransformer/ && npm run test:build",
+        "test:build:app": "cd ./MetaDataTransformerUsage/ && npm run test:build",
+        "test:start": "jest .test.js --coverageReporters=text",
+        "test:start:coveralls": "jest .test.js --coverageReporters=text-lcov | coveralls",
+        "test:start:html": "jest .test.js --coverageReporters=html"
     },
     "devDependencies": {
         "coveralls": "^3.0.3",
