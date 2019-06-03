@@ -1,9 +1,5 @@
 import { reflection } from '../src/reflection';
-
-declare const describe: Function;
-declare const it: Function;
-declare const expect: Function;
-/// <reference types="jest" />
+import '@types/jest'
 
 class IHaveOnePublicPropertyWithTypeString {
     public property: string;

@@ -15,15 +15,17 @@
         "clean:dist": "if exist dist rmdir dist /q /s",
         "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
-        "test": "npm run build:main && npm run build:restore && npm run test:build && npm run test:start",
+        "test": "npm run build:main && npm run build:restore && npm run test:build && npm run test:prepare && npm run test:start",
+        "test:prepare": "replace-in-file \"require(\\\"@types/jest\\\");\" \"\" \"test_out/**/*.test.js\" && replace-in-file \"require('@types/jest');\" \"\" \"test_out/**/*.test.js\"",
         "test:build": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map --source-root=\".\\..\\..\\..\\..\" --map-root=\".\\..\"",
-        "test:start": "jest .test.js --coverageReporters=text"
+        "test:start": "jest .test.js"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
         "jest": "^24.8.0",
         "sorcery": "^0.10.0",
         "webpack": "^4.32.2",
-        "webpack-cli": "^3.3.2"
+        "webpack-cli": "^3.3.2",
+        "replace-in-file": "^4.1.0"
     }
 }

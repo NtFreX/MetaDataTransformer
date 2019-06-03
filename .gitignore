@@ -1,4 +1,4 @@
 **/dist/
 **/test_out/
 **/node_modules/
-/coverage/
+**/coverage/
