@@ -7,7 +7,7 @@
         "build": "npm run build:main && npm run build:restore && npm run build:start",
         "build:main": "cd ./../MetaDataTransformer && npm run build",
         "build:restore": "npm run restore",
-        "build:start": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map --inline-source-map",
+        "build:start": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map",
         "restore": "npm install && npm link .\\..\\MetaDataTransformer",
         "clean": "npm run clean:main && npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out",
         "clean:main": "cd ./../MetaDataTransformer && npm run clean",
@@ -16,7 +16,7 @@
         "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "test": "npm run build:main && npm run build:restore && npm run test:build && npm run test:build:post && npm run test:start",
-        "test:build": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map",
+        "test:build": "cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map",
         "test:build:post": "replace-in-file \"require(\\\"@types/jest\\\");\" \"\" \"test_out/**/*.test.js\" && replace-in-file \"require('@types/jest');\" \"\" \"test_out/**/*.test.js\"",
         "test:start": "jest .test.js"
     },

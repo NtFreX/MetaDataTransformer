@@ -4,7 +4,7 @@
       "moduleResolution": "node",
       "target": "es6",
       "outDir": "./dist",
-      "inlineSourceMap": true,
+      "sourceMap": true,
       "declaration": true
     },
     "include": [
