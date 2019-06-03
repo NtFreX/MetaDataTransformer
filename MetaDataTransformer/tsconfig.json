@@ -4,7 +4,6 @@
       "moduleResolution": "node",
       "target": "es6",
       "outDir": "./dist",
-      "sourceRoot": "./../../../node_modules/metadatatransformer/src",
       "inlineSourceMap": true,
       "declaration": true
     },

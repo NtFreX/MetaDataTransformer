@@ -2,6 +2,10 @@
     "name": "ntfrex",
     "version": "0.0.1",
     "scripts": {
+        "clean": "npm run clean:main && npm run clean:app && npm run clean:coverage",
+        "clean:main": "cd ./MetaDataTransformer/ && npm run clean",
+        "clean:app": "cd ./MetaDataTransformerUsage/ && npm run clean",
+        "clean:coverage": "if exist coverage rmdir coverage /q /s",
         "test": "npm run test:prepare && npm run test:build && npm run test:start",
         "test:coveralls": "npm run test:prepare && npm run test:build && npm run test:start -- --coverageReporters=text-lcov | coveralls",
         "test:html": "npm run test:prepare && npm run test:build && npm run test:start -- --coverageReporters=html",
@@ -9,8 +13,8 @@
         "test:prepare:main": "cd ./MetaDataTransformer/ && npm run build",
         "test:prepare:app": "cd ./MetaDataTransformerUsage/ && npm run build",
         "test:build": "npm run test:build:main && npm run test:build:app",
-        "test:build:main": "cd ./MetaDataTransformer/ && npm run test:build && npm run test:prepare",
-        "test:build:app": "cd ./MetaDataTransformerUsage/ && npm run test:build && npm run test:prepare",
+        "test:build:main": "cd ./MetaDataTransformer/ && npm run test:build && npm run test:build:post",
+        "test:build:app": "cd ./MetaDataTransformerUsage/ && npm run test:build && npm run test:build:post",
         "test:start": "jest .test.js"
     },
     "devDependencies": {

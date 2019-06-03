@@ -1,5 +1,5 @@
-import { reflection } from '../src/reflection';
 import '@types/jest'
+import { reflection } from '../src/reflection';
 
 class IHaveOnePublicPropertyWithTypeString {
     public property: string;
