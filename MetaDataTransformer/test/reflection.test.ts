@@ -1,4 +1,4 @@
-import '@types/jest'
+import '@types/jest' // tslint:disable-line:no-import-side-effect
 import { reflection } from '../src/reflection';
 
 class IHaveOnePublicPropertyWithTypeString {
