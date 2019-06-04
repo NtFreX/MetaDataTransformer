@@ -37,33 +37,42 @@ Optional arguments:
   -h, --help     Show this help message and exit.
   -v, --verbose  Show extra logging detail
   
-usage: tsca build [-h] --pattern PATTERN [--out-dir OUTDIR]
-                  [--out-file OUTFILE] [--root-dir ROOTDIR]
+usage: tsca build [-h] [--inline-source-map] --pattern PATTERN
+                  [--out-dir OUTDIR] [--out-file OUTFILE] [--root-dir ROOTDIR]
                   [--module {None,CommonJS,AMD,UMD,System,ES2015,ESNext}]
                   [--module-resolution {Classic,NodeJs}]
                   [--target {ES3,ES5,ES2015,ES2016,ES2017,ES2018,ESNext,JSON,Latest}]
                   [--source-map] [--source-root SOURCEROOT]
-                  [--map-root MAPROOT]
+                  [--map-root MAPROOT] [--types TYPES]
+                  [--type-roots TYPEROOTS]
 ```
 
 ## Reflection API
 
 ```ts
-export interface reflection {
-    isType:             (type: Function): boolean;
-    getTypeDeclaration: (type: Function): IClassDeclaration;
-    isObjectValid:      (obj: any, type: Function): boolean;
+export interface ITypeDeclaration {
+    properties: {
+        [id: string]: IPropertyDeclaration;
+    };
 }
-
-export interface IClassDeclaration {
-    properties: { [id: string] : IPropertyDeclaration }
-}
-
 export interface IPropertyDeclaration {
     isOptional: boolean;
     isStatic: boolean;
     accessModifier: AccessModifier;
 }
+export declare enum AccessModifier {
+    Public = 0,
+    Protected = 1,
+    Private = 2
+}
+export interface IType<T> extends Function {
+    new (...args: (object | string | number | boolean)[]): T;
+}
+export declare const reflection: {
+    canCast: <T>(obj: object, type: IType<T>) => boolean;
+    getType: <T>(type: IType<T>) => ITypeDeclaration;
+    isType: <T>(type: IType<T>) => boolean;
+};
 ```
 
 ## Reflection API usage
@@ -76,7 +85,7 @@ class Test {
 }
 
 if(reflection.isType(Test)) {
-  reflection.getTypeDeclaration(Test);
-  reflection.isObjectValid({ }, Test);
+  reflection.getType(Test);
+  reflection.canCast({ }, Test);
 }
 ```

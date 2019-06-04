@@ -5,7 +5,9 @@
       "target": "es6",
       "outDir": "./dist",
       "sourceMap": true,
-      "declaration": true
+      "declaration": true,
+      "types": [ "node" ],
+      "typeRoots": [ "./node_modules/@types" ]
     },
     "include": [
         "src/**/*"

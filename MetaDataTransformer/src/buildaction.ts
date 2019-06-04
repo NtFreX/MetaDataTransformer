@@ -23,6 +23,7 @@ export class BuildAction extends CommandLineAction {
     private _sourceRoot: CommandLineStringParameter;
     private _mapRoot: CommandLineStringParameter;
     private _types: CommandLineStringListParameter;
+    private _typeRoots: CommandLineStringListParameter;
 
     public constructor() {
       super({
@@ -48,9 +49,10 @@ export class BuildAction extends CommandLineAction {
             sourceRoot: this._sourceRoot.value,
             target: this._target.value,
             types: [ ...this._types.values ],
+            typeRoots: [ ...this._typeRoots.values ],
         };
 
-        Logger.log(`BuildOptions: '${options}'`);
+        Logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
 
         const program = build(options);
         const result = emit(program);
@@ -154,6 +156,12 @@ export class BuildAction extends CommandLineAction {
             argumentName: 'TYPES',
             description: 'The types',
             parameterLongName: '--types',
+            required: false,
+        });
+        this._typeRoots = this.defineStringListParameter({
+            argumentName: 'TYPEROOTS',
+            description: 'The type roots',
+            parameterLongName: '--type-roots',
             required: false,
         });
     }
