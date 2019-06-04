@@ -22,7 +22,7 @@
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "test": "npm run build:main && npm run build:restore && npm run test:build && npm run test:build:post && npm run test:start",
         "test:build": "cd ./../MetaDataTransformer && npm start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./../MetaDataTransformerUsage/test_out\" --source-map --types=node --types=jest --type-roots=\"./../MetaDataTransformerUsage/node_modules/@types\"",
-        "test:build:post": "npx replace require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\) \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
+        "test:build:post": "npx replace \"require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\)\" \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
         "test:start": "jest .test.js"
     },
     "devDependencies": {
