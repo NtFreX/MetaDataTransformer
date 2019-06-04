@@ -3,7 +3,7 @@ import * as glob from 'glob';
 
 import { metadataTransformer } from './transformer';
 import { Logger } from './logger';
-import { isNullOrUndefined } from 'util';
+import { toEnumValue } from './utils';
 
 
 const emptyCancellationToken: ts.CancellationToken = {
@@ -19,14 +19,6 @@ const transformers: ts.CustomTransformers = {
 const emitOnlyDtsFiles = false;
 const targetSourceFile: ts.SourceFile = undefined;
 const writeFile: ts.WriteFileCallback = undefined;
-
-const toEnumValue = (type: { [id: number]: string }, value: string): number => {
-    if(isNullOrUndefined(value) || value == "") {
-        return null;
-    } 
-    
-    return type[value];
-};
 
 export class BuildOptions {
     public inlineSourceMap?: boolean;
