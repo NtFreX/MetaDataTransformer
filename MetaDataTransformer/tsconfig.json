@@ -5,9 +5,9 @@
       "target": "es6",
       "outDir": "./dist",
       "sourceMap": true,
-      "sourceRoot": "./../../../node_modules/metadatatransformer/src",
-      "mapRoot": "./../../../node_modules/metadatatransformer/dist/",
-      "declaration": true
+      "declaration": true,
+      "types": [ "node" ],
+      "typeRoots": [ "./node_modules/@types" ]
     },
     "include": [
         "src/**/*"

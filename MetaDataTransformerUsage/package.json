@@ -1,21 +1,36 @@
 {
-    "name": "test",
+    "name": "metadatatransformerusage",
     "version": "0.0.1",
     "scripts": {
-        "pack": "npm run build && webpack --mode=\"development\" --devtool source-map dist/src/main.js -o dist/bundle.js && sorcery -i dist/bundle.js",
+        "pack": "npm run build && npm run pack:create && npm run pack:sourcemap:prepare && npm run pack:sourcemap",
+        "pack:create": "webpack --mode=\"development\" --devtool source-map dist/src/main.js -o dist/bundle.js",
+        "pack:sourcemap:prepare": "npm run pack:sourcemap:prepare:root && npm run pack:sourcemap:prepare:webpack",
+        "pack:sourcemap:prepare:root": "replace \"\"\"sourceRoot\"\"\":\"\"\"\"\"\" \"\"\"\"sourceRoot\"\"\":\"\"\"./../\"\"\"\" dist/bundle.js.map",
+        "pack:sourcemap:prepare:webpack": "replace webpack:/// \"\" dist/bundle.js.map",
+        "pack:sourcemap": "sorcery -d -i dist/bundle.js",
         "rebuild": "npm run clean && npm run build",
-        "build": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map --source-root=\".\\..\\..\\..\\..\" --map-root=\".\\..\" && cd ./../MetaDataTransformerUsage",
+        "build": "npm run build:main && npm run build:restore && npm run build:start",
+        "build:main": "cd ./../MetaDataTransformer && npm run build",
+        "build:restore": "npm run restore",
+        "build:start": "cd ./../MetaDataTransformer && npm start -- -v build --pattern=\"/src/**/*.ts\" --out-dir=\"./../MetaDataTransformerUsage/dist\" --root-dir=\"./../MetaDataTransformerUsage\" --module=CommonJS --module-resolution=NodeJs --target=ES5 --source-map --types=node --type-roots=\"./../MetaDataTransformerUsage/node_modules/@types\"",
         "restore": "npm install && npm link .\\..\\MetaDataTransformer",
-        "clean": "(cd ./../MetaDataTransformer) && (npm run clean) && (cd ./../MetaDataTransformerUsage) && (if exist node_modules rmdir node_modules /q /s) && (if exist dist rmdir dist /q /s) && (if exist package-lock.json del -f -q package-lock.json) && (if exist test_out rmdir test_out /q /s)",
-        "test": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" && cd ./../MetaDataTransformerUsage && jest .test.js --coverage --coverageReporters=text",
-        "test-coveralls": "cd ./../MetaDataTransformer && npm run build && cd ./../MetaDataTransformerUsage && npm run restore && cd ./../MetaDataTransformer && npm run start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./test_out\" --source-map --inline-source-map && cd ./../MetaDataTransformerUsage && jest .test.js --coverage --coverageReporters=text-lcov | coveralls"
+        "clean": "npm run clean:main && npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out",
+        "clean:main": "cd ./../MetaDataTransformer && npm run clean",
+        "clean:node_modules": "if exist node_modules rmdir node_modules /q /s",
+        "clean:dist": "if exist dist rmdir dist /q /s",
+        "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
+        "clean:test_out": "if exist test_out rmdir test_out /q /s",
+        "test": "npm run build:main && npm run build:restore && npm run test:build && npm run test:build:post && npm run test:start",
+        "test:build": "cd ./../MetaDataTransformer && npm start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\"./../MetaDataTransformerUsage\" --out-dir=\"./../MetaDataTransformerUsage/test_out\" --source-map --types=node --types=jest --type-roots=\"./../MetaDataTransformerUsage/node_modules/@types\"",
+        "test:build:post": "npx replace \"require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\)\" \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
+        "test:start": "jest .test.js"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
-        "coveralls": "^3.0.3",
         "jest": "^24.8.0",
         "sorcery": "^0.10.0",
         "webpack": "^4.32.2",
-        "webpack-cli": "^3.3.2"
+        "webpack-cli": "^3.3.2",
+        "replace": "^1.1.0"
     }
 }

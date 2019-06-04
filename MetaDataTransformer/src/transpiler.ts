@@ -1,6 +1,5 @@
 import * as ts from 'typescript';
 import * as glob from 'glob';
-import * as path from 'path';
 
 import { metadataTransformer } from './transformer';
 import { Logger } from './logger';
@@ -21,23 +20,13 @@ const emitOnlyDtsFiles = false;
 const targetSourceFile: ts.SourceFile = undefined;
 const writeFile: ts.WriteFileCallback = undefined;
 
-const toAbsolute = (location: string, rootPath: string): string => {
-    if(isNullOrUndefined(location)) {
-        return null;
-    }
-    if(isNullOrUndefined(rootPath)) {
-        return location;
-    }
-    return path.join(rootPath, location);
-};
-
 const toEnumValue = (type: { [id: number]: string }, value: string): number => {
     if(isNullOrUndefined(value) || value == "") {
         return null;
     } 
     
     return type[value];
-}
+};
 
 export class BuildOptions {
     public inlineSourceMap?: boolean;
@@ -52,6 +41,7 @@ export class BuildOptions {
     public sourceRoot?: string;
     public mapRoot?: string;
     public types?: string[];
+    public typeRoots?: string[];
 }
 
 export const build = (buildOptions: BuildOptions): ts.Program => {
@@ -60,12 +50,13 @@ export const build = (buildOptions: BuildOptions): ts.Program => {
         mapRoot: buildOptions.mapRoot,
         module: toEnumValue(ts.ModuleKind, buildOptions.module),
         moduleResolution: toEnumValue(ts.ModuleResolutionKind, buildOptions.moduleResolution),
-        outDir: toAbsolute(buildOptions.outDir, buildOptions.rootDir),
-        outFile: toAbsolute(buildOptions.outFile, buildOptions.rootDir),
+        outDir: buildOptions.outDir,
+        outFile: buildOptions.outFile,
         rootDir: buildOptions.rootDir,
         sourceMap: buildOptions.sourceMap,
         sourceRoot: buildOptions.sourceRoot,
         target: toEnumValue(ts.ScriptTarget, buildOptions.target),
+        typeRoots: buildOptions.typeRoots,
         types: buildOptions.types,
     };
     
@@ -80,4 +71,4 @@ export const build = (buildOptions: BuildOptions): ts.Program => {
 
 export const emit = (program: ts.Program): ts.EmitResult => {
     return program.emit(targetSourceFile, writeFile, emptyCancellationToken, emitOnlyDtsFiles, transformers);
-}
+};
