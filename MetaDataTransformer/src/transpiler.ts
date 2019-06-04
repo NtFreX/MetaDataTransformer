@@ -56,8 +56,8 @@ export const build = (buildOptions: BuildOptions): ts.Program => {
         sourceMap: buildOptions.sourceMap,
         sourceRoot: buildOptions.sourceRoot,
         target: toEnumValue(ts.ScriptTarget, buildOptions.target),
-        types: buildOptions.types,
         typeRoots: buildOptions.typeRoots,
+        types: buildOptions.types,
     };
     
     const compilerHost = ts.createCompilerHost(options);

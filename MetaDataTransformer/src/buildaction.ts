@@ -34,7 +34,7 @@ export class BuildAction extends CommandLineAction {
     }
    
     protected onExecute(): Promise<void> {
-        var start = new Date();
+        const start = new Date();
         const options: BuildOptions = 
         {
             inlineSourceMap: this._inlineSourceMap.value,
@@ -48,8 +48,8 @@ export class BuildAction extends CommandLineAction {
             sourceMap: this._sourceMap.value,
             sourceRoot: this._sourceRoot.value,
             target: this._target.value,
-            types: [ ...this._types.values ],
             typeRoots: [ ...this._typeRoots.values ],
+            types: [ ...this._types.values ],
         };
 
         Logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
@@ -78,7 +78,7 @@ export class BuildAction extends CommandLineAction {
             }
         });
         
-        var end = new Date().getTime() - start.getTime();
+        const end = new Date().getTime() - start.getTime();
         console.info("Execution time: %dms", end);
 
         return Promise.resolve();
