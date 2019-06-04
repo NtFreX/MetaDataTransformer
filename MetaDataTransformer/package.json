@@ -24,7 +24,7 @@
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "test": "npm run build && npm run test:build && npm run test:build:post && npm run test:start",
         "test:build": "npm start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --types=node --types=jest --type-roots=\"./node_modules/@types\"",
-        "test:build:post": "npx replace require\\([\\'\\\"\"]\\@[tT][yY][pP][eE][sS]/[a-zA-Z]+[\\'\\\"\"]\\) \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
+        "test:build:post": "npx replace require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\) \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
         "test:start": "jest .test.js"
     },
     "main": "./dist/index.js",
