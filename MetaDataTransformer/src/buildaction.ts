@@ -8,9 +8,12 @@ import {
     CommandLineFlagParameter, 
     CommandLineStringListParameter} from '@microsoft/ts-command-line';
 
+import { injectable } from 'tsyringe';
+
 import { Transpiler, BuildOptions } from "./transpiler";
 import { Logger } from './logger';
 
+@injectable()
 export class BuildAction extends CommandLineAction {
     private _inlineSourceMap: CommandLineFlagParameter;
     private _pattern: CommandLineStringParameter;
@@ -25,21 +28,27 @@ export class BuildAction extends CommandLineAction {
     private _mapRoot: CommandLineStringParameter;
     private _types: CommandLineStringListParameter;
     private _typeRoots: CommandLineStringListParameter;
+    private _emitDecoratorMetadata: CommandLineFlagParameter;
+    private _experimentalDecorators: CommandLineFlagParameter;
 
-    private transpiler = new Transpiler(ts, glob);
+    private transpiler: Transpiler;
 
-    public constructor() {
+    public constructor(private logger: Logger) {
       super({
         actionName: 'build',
         documentation: 'Transpiles the given typescript files',
         summary: 'Transpiles the given typescript files',
       });
+
+      this.transpiler = new Transpiler(logger, ts, glob);
     }
    
     protected onExecute(): Promise<void> {
         const start = new Date();
         const options: BuildOptions = 
         {
+            emitDecoratorMetadata: this._emitDecoratorMetadata.value,
+            experimentalDecorators: this._experimentalDecorators.value,
             inlineSourceMap: this._inlineSourceMap.value,
             mapRoot: this._mapRoot.value,
             module: this._module.value,
@@ -55,16 +64,16 @@ export class BuildAction extends CommandLineAction {
             types: [ ...this._types.values ],
         };
 
-        Logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
+        this.logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
 
         const program = this.transpiler.build(options);
         const result = this.transpiler.emit(program);
 
         if(result.emitSkipped) {
-            Logger.log('Emit has been skiped');
+            this.logger.log('Emit has been skiped');
         } else {
-            Logger.log('Emited files:')
-            Logger.log(result.emittedFiles);
+            this.logger.log('Emited files:')
+            this.logger.log(result.emittedFiles);
         }
 
         result.diagnostics.forEach(diagnostic => {
@@ -88,6 +97,16 @@ export class BuildAction extends CommandLineAction {
     }
    
     protected onDefineParameters(): void {     
+        this._emitDecoratorMetadata = this.defineFlagParameter({
+            description: 'Should emit decorator metadata',
+            parameterLongName: '--emit-decorator-metadata',
+            required: false,
+        });
+        this._experimentalDecorators = this.defineFlagParameter({
+            description: 'Should allow experimental decorators',
+            parameterLongName: '--experimental-decorators',
+            required: false,
+        });
         this._inlineSourceMap = this.defineFlagParameter({
             description: 'Should create inline source maps',
             parameterLongName: '--inline-source-map',            

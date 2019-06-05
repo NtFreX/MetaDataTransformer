@@ -20,6 +20,8 @@ const targetSourceFile: ts.SourceFile = undefined;
 const writeFile: ts.WriteFileCallback = undefined;
 
 export class BuildOptions {
+    public emitDecoratorMetadata?: boolean;
+    public experimentalDecorators?: boolean;
     public inlineSourceMap?: boolean;
     public pattern: string;
     public outDir?: string;
@@ -49,10 +51,12 @@ export interface IGlobService {
 }
 
 export class Transpiler {
-    constructor(private typescriptService: ITypescriptService, private globService: IGlobService) { }
+    constructor(private logger: Logger, private typescriptService: ITypescriptService, private globService: IGlobService) { }
 
     public build(buildOptions: BuildOptions): ts.Program {
         const options: ts.CompilerOptions = {
+            emitDecoratorMetadata: buildOptions.emitDecoratorMetadata,
+            experimentalDecorators: buildOptions.experimentalDecorators,
             inlineSourceMap: buildOptions.inlineSourceMap,
             mapRoot: buildOptions.mapRoot,
             module: toEnumValue(ts.ModuleKind, buildOptions.module),
@@ -65,13 +69,14 @@ export class Transpiler {
             target: toEnumValue(ts.ScriptTarget, buildOptions.target),
             typeRoots: buildOptions.typeRoots,
             types: buildOptions.types,
+            
         };
         
         const compilerHost = this.typescriptService.createCompilerHost(options);
     
         const files = this.globService.sync(buildOptions.pattern, { root: buildOptions.rootDir });
-        Logger.log("Found files to transpile:")
-        Logger.log(files);
+        this.logger.log("Found files to transpile:")
+        this.logger.log(files);
     
         return this.typescriptService.createProgram(files, options, compilerHost);    
     }

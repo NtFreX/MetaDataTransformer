@@ -1,6 +1,10 @@
 import '@types/jest'; // tslint:disable-line:no-import-side-effect -> vscode code completion
+import "reflect-metadata";
+import { container } from "tsyringe";
+
 import { transformers, emptyCancellationToken, Transpiler, ITypescriptService, IGlobService, BuildOptions } from '../src/transpiler';
 import { metadataTransformer } from '../src/transformer';
+import { Logger } from '../src/logger';
 
 describe('transpiler', () => {
     describe('transformers configuration', () => {
@@ -36,7 +40,8 @@ describe('transpiler', () => {
             const typescriptService: ITypescriptService = { createCompilerHost: jest.fn(), createProgram: jest.fn() };
             const globService: IGlobService = { sync: jest.fn() };
             const buildOptions: BuildOptions = { pattern: '' };
-            const transpiler = new Transpiler(typescriptService, globService);
+            const logger = container.resolve(Logger);
+            const transpiler = new Transpiler(logger, typescriptService, globService);
 
             transpiler.build(buildOptions);
 
@@ -47,7 +52,8 @@ describe('transpiler', () => {
             const typescriptService: ITypescriptService = { createCompilerHost: jest.fn(), createProgram: jest.fn() };
             const globService: IGlobService = { sync: jest.fn() };
             const buildOptions: BuildOptions = { pattern: '' };
-            const transpiler = new Transpiler(typescriptService, globService);
+            const logger = container.resolve(Logger);
+            const transpiler = new Transpiler(logger, typescriptService, globService);
 
             transpiler.build(buildOptions);
 
@@ -59,7 +65,8 @@ describe('transpiler', () => {
             const globService: IGlobService = { sync: jest.fn() };
             const pattern = '/src/**/*.ts';
             const buildOptions: BuildOptions = { pattern: pattern };
-            const transpiler = new Transpiler(typescriptService, globService);
+            const logger = container.resolve(Logger);
+            const transpiler = new Transpiler(logger, typescriptService, globService);
 
             transpiler.build(buildOptions);
 

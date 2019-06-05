@@ -1,13 +1,21 @@
-export interface IConsoleService {
-    log: (obj?: object | string | number) => void;
+import { injectable, singleton } from "tsyringe";
+
+export class ConsoleService {
+    public log(obj?: string | number | object): void {
+        console.log(obj);
+    }
 }
 
+@injectable()
+@singleton()
 export class Logger {
-    public static isEnabled: boolean;
+    public isEnabled: boolean;
 
-    public static log(obj?: object | string | number): void {
-        if(Logger.isEnabled) {
-            console.log(obj);
+    constructor(private consoleService: ConsoleService) { }
+
+    public log(obj?: object | string | number): void {
+        if(this.isEnabled) {
+            this.consoleService.log(obj);
         }
     }
 }
