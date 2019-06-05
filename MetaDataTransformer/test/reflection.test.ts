@@ -1,4 +1,4 @@
-import '@types/jest' // tslint:disable-line:no-import-side-effect
+import '@types/jest'; // tslint:disable-line:no-import-side-effect -> vscode code completion
 import { reflection, AccessModifier } from '../src/reflection';
 
 class SimpleType { }
@@ -15,16 +15,43 @@ describe('type reflection', () => {
             expect(istType).toBeTruthy();
         });
 
-        it('should return false when given null', () => {
-            const istType = reflection.isType(null);
+        it.each
+        `
+            type
+            ${undefined}
+            ${null}
+        `('should return false when given $type', (type) => {
+            const istType = reflection.isType(type);
+
+            expect(istType).toBeFalsy();
+        });
+
+        it.each
+        `
+            type
+            ${Date}
+            ${Number}
+            ${File}
+            ${Blob}
+        `('should return false when given a type which has not been transpiled by this library as $type', (type) => {
+            const istType = reflection.isType(type);
 
             expect(istType).toBeFalsy();
         });
     });
 
     describe('method getType', () => {
-        it('should throw when given no type', () => {
-            const getType = () => reflection.getType(null);
+        it.each
+        `
+            type
+            ${Date}
+            ${Number}
+            ${File}
+            ${Blob}
+            ${null}
+            ${undefined}
+        `('should throw when given no valid type as $type', (type) => {
+            const getType = () => reflection.getType(type);
 
             expect(getType).toThrow('The given object seems to be no type.');
         });

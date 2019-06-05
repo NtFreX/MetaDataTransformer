@@ -1,4 +1,5 @@
 import * as ts from 'typescript';
+import * as glob from 'glob';
 
 import { 
     CommandLineStringParameter, 
@@ -7,7 +8,7 @@ import {
     CommandLineFlagParameter, 
     CommandLineStringListParameter} from '@microsoft/ts-command-line';
 
-import { build, emit, BuildOptions } from "./transpiler";
+import { Transpiler, BuildOptions } from "./transpiler";
 import { Logger } from './logger';
 
 export class BuildAction extends CommandLineAction {
@@ -24,6 +25,8 @@ export class BuildAction extends CommandLineAction {
     private _mapRoot: CommandLineStringParameter;
     private _types: CommandLineStringListParameter;
     private _typeRoots: CommandLineStringListParameter;
+
+    private transpiler = new Transpiler(ts, glob);
 
     public constructor() {
       super({
@@ -54,8 +57,8 @@ export class BuildAction extends CommandLineAction {
 
         Logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
 
-        const program = build(options);
-        const result = emit(program);
+        const program = this.transpiler.build(options);
+        const result = this.transpiler.emit(program);
 
         if(result.emitSkipped) {
             Logger.log('Emit has been skiped');

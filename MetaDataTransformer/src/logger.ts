@@ -1,3 +1,7 @@
+export interface IConsoleService {
+    log: (obj?: object | string | number) => void;
+}
+
 export class Logger {
     public static isEnabled: boolean;
 

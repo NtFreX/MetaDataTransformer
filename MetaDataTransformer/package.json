@@ -5,7 +5,7 @@
         "@microsoft/ts-command-line": "^4.2.5",
         "@types/node": "^12.0.4",
         "glob": "^7.1.4",
-        "typescript": "~3.5"
+        "typescript": "3.x"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
@@ -17,14 +17,14 @@
         "rebuild": "npm run clean && npm run build",
         "build": "npm run restore && tsc",
         "restore": "npm install",
-        "clean": "npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out && clean:coverage",
+        "clean": "npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out && npm run clean:coverage",
         "clean:node_modules": "if exist node_modules rmdir node_modules /q /s",
         "clean:dist": "if exist dist rmdir dist /q /s",
         "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "clean:coverage": "if exist coverage rmdir coverage /q /s",
         "test": "npm run build && npm run test:build && npm run test:build:post && npm run test:start",
-        "test:build": "npm start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --types=node --types=jest --type-roots=\"./node_modules/@types\"",
+        "test:build": "npm start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map --types=node --types=jest --type-roots=\"./node_modules/@types\"",
         "test:build:post": "npx replace \"require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\)\" \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
         "test:start": "jest .test.js"
     },
