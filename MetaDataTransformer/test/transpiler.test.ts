@@ -1,13 +1,11 @@
 import '../polyfill';
-import { resetContainer } from '../container';
-
-import '@types/jest'; // tslint:disable-line:no-import-side-effect -> vscode code completion
 
 import { container } from "tsyringe";
 
 import { transformers, emptyCancellationToken, Transpiler, IBuildOptions } from '../src/transpiler';
 import { metadataTransformer } from '../src/transformer';
 import { IConfigProvider } from '../src/configprovider';
+import { resetContainer } from '../container';
 
 jest.mock('typescript');
 jest.mock('glob');
@@ -51,12 +49,18 @@ describe('transpiler', () => {
     });
 
     describe('build', () => {
+        beforeEach(() => {
+            const configProvider: IConfigProvider = { 
+                get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), 
+                resolveConfigFile: jest.fn() 
+            };
+            
+            container.register('IConfigProvider', { useValue: configProvider });
+        });
+
         it('should call ts.createCompilerHost', () => {
             const buildOptions: IBuildOptions = { include: [ '' ] };
-            const configProvider: IConfigProvider = { get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), resolveConfigFile: jest.fn() };
-            const transpiler = container
-                .register('IConfigProvider', { useValue: configProvider })
-                .resolve(Transpiler);
+            const transpiler = container.resolve(Transpiler);
 
             transpiler.build(null, buildOptions);
 
@@ -65,10 +69,7 @@ describe('transpiler', () => {
 
         it('should call ts.createProgram', () => {
             const buildOptions: IBuildOptions = { include: [ '' ] };
-            const configProvider: IConfigProvider = { get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), resolveConfigFile: jest.fn() };
-            const transpiler = container
-                .register('IConfigProvider', { useValue: configProvider })
-                .resolve(Transpiler);
+            const transpiler = container.resolve(Transpiler);
 
             transpiler.build(null, buildOptions);
             
@@ -78,10 +79,7 @@ describe('transpiler', () => {
         it('should call glob.sync with given pattern', () => {
             const pattern = '/src/**///*.ts';
             const buildOptions: IBuildOptions = { include: [ pattern ] };
-            const configProvider: IConfigProvider = { get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), resolveConfigFile: jest.fn() };
-            const transpiler = container
-                .register('IConfigProvider', { useValue: configProvider })
-                .resolve(Transpiler);
+            const transpiler = container.resolve(Transpiler);
 
             transpiler.build(null, buildOptions);
 

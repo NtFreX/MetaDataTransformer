@@ -4,7 +4,7 @@ import * as glob from 'glob';
 import { injectable, inject } from 'tsyringe';
 
 import { metadataTransformer } from './transformer';
-import { Logger } from './logger';
+import { ILogger, LogLevel } from './logger';
 import { toEnumValue } from './utils';
 import { IConfigProvider } from './configprovider';
 import { isNullOrUndefined } from 'util';
@@ -50,46 +50,35 @@ export interface ITranspiler {
 export class Transpiler implements ITranspiler {
     public constructor(
         @inject('IConfigProvider') private configProvider: IConfigProvider,
-        private logger: Logger) { }
-
-    private getModuleResolution(moduleResolution?: string) {
-        if(isNullOrUndefined(moduleResolution) || moduleResolution.toLowerCase() === 'classic') {
-            return ts.ModuleResolutionKind.Classic;
-        }
-        if(moduleResolution.toLowerCase() === 'node') {
-            return ts.ModuleResolutionKind.NodeJs;
-        }
-
-        throw `Unknown module resolution ${moduleResolution}`;
-    }
+        @inject('ILogger') private logger: ILogger) { }
 
     public build(environment: string, buildOptions: IBuildOptions): ts.Program {
-        buildOptions = this.configProvider.get(environment, buildOptions);
+        const realBuildOptions = this.configProvider.get(environment, buildOptions);
 
         const options: ts.CompilerOptions = {
-            emitDecoratorMetadata: buildOptions.emitDecoratorMetadata,
-            experimentalDecorators: buildOptions.experimentalDecorators,
-            inlineSourceMap: buildOptions.inlineSourceMap,
-            mapRoot: buildOptions.mapRoot,
-            module: toEnumValue(ts.ModuleKind, buildOptions.module),
-            moduleResolution: this.getModuleResolution(buildOptions.moduleResolution),
-            outDir: buildOptions.outDir,
-            outFile: buildOptions.outFile,
-            rootDir: buildOptions.rootDir,
-            sourceMap: buildOptions.sourceMap,
-            sourceRoot: buildOptions.sourceRoot,
-            target: toEnumValue(ts.ScriptTarget, buildOptions.target),
-            typeRoots: buildOptions.typeRoots,
-            types: buildOptions.types,  
+            emitDecoratorMetadata: realBuildOptions.emitDecoratorMetadata,
+            experimentalDecorators: realBuildOptions.experimentalDecorators,
+            inlineSourceMap: realBuildOptions.inlineSourceMap,
+            mapRoot: realBuildOptions.mapRoot,
+            module: toEnumValue(ts.ModuleKind, realBuildOptions.module),
+            moduleResolution: this.getModuleResolution(realBuildOptions.moduleResolution),
+            outDir: realBuildOptions.outDir,
+            outFile: realBuildOptions.outFile,
+            rootDir: realBuildOptions.rootDir,
+            sourceMap: realBuildOptions.sourceMap,
+            sourceRoot: realBuildOptions.sourceRoot,
+            target: toEnumValue(ts.ScriptTarget, realBuildOptions.target),
+            typeRoots: realBuildOptions.typeRoots,
+            types: realBuildOptions.types,  
         };
 
         this.logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
         
         const compilerHost = ts.createCompilerHost(options);
     
-        const include = isNullOrUndefined(buildOptions.include) ? [] : buildOptions.include;
+        const include = isNullOrUndefined(realBuildOptions.include) ? [] : realBuildOptions.include;
         const files = include
-            .map(pattern => glob.sync(pattern, { root: buildOptions.rootDir }))
+            .map(pattern => glob.sync(pattern, { root: realBuildOptions.rootDir }))
             .reduce((a, b) => a.concat(b));
         
         this.logger.log("Found files to transpile:")
@@ -99,7 +88,13 @@ export class Transpiler implements ITranspiler {
     }
     
     public emit(program: ts.Program): ts.EmitResult {
-        const result = program.emit(targetSourceFile, writeFile, emptyCancellationToken, emitOnlyDtsFiles, transformers);
+        const result = program.emit(
+            targetSourceFile, 
+            writeFile, 
+            emptyCancellationToken, 
+            emitOnlyDtsFiles, 
+            transformers);
+
         if(result.emitSkipped) {
             this.logger.log('Emit has been skiped');
         } else {
@@ -107,40 +102,45 @@ export class Transpiler implements ITranspiler {
             this.logger.log(result.emittedFiles);
         }
 
-        let allDiagnostics = ts
+        const allDiagnostics = ts
             .getPreEmitDiagnostics(program)
             .concat(result.diagnostics);
 
-            allDiagnostics.forEach(diagnostic => {
-                if (diagnostic.file) {
-                    let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-                      diagnostic.start!
-                    );
-                    let message = ts.flattenDiagnosticMessageText(
-                      diagnostic.messageText,
-                      "\n"
-                    );
-                    console.log(
-                      `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
-                    );
-                  } else {
-                    console.log(
-                      `${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`
-                    );
-                  }
-            /*switch(diagnostic.category) {
+        allDiagnostics.forEach(diagnostic => {
+            switch(diagnostic.category) {
                 case ts.DiagnosticCategory.Error:
-                    this.logger.log(diagnostic.messageText, LogLevel.Error);
+                    this.logger.log(this.toDiagnosticMessage(diagnostic), LogLevel.Error);
                     break;
-                    case ts.DiagnosticCategory.Warning:
-                        this.logger.log(diagnostic.messageText, LogLevel.Warn);
-                        break;
-                    default:
-                        this.logger.log(diagnostic.messageText, LogLevel.Debug);
-                        break;
-            }*/
+                case ts.DiagnosticCategory.Warning:
+                    this.logger.log(this.toDiagnosticMessage(diagnostic), LogLevel.Warn);
+                    break;
+                default:
+                    this.logger.log(this.toDiagnosticMessage(diagnostic), LogLevel.Debug);
+                    break;
+            }
         });
 
         return result;
-    }    
+    }
+
+    private toDiagnosticMessage(diagnostic: ts.Diagnostic): string {
+        if (!isNullOrUndefined(diagnostic.file)) {
+            const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+            const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
+            return `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`;
+        }
+
+        return  `${ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n")}`;
+    }
+
+    private getModuleResolution(moduleResolution?: string): ts.ModuleResolutionKind {
+        if(isNullOrUndefined(moduleResolution) || moduleResolution.toLowerCase() === 'classic') {
+            return ts.ModuleResolutionKind.Classic;
+        }
+        if(moduleResolution.toLowerCase() === 'node') {
+            return ts.ModuleResolutionKind.NodeJs;
+        }
+
+        throw `Unknown module resolution ${moduleResolution}`;
+    }
 }

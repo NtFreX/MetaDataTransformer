@@ -4,12 +4,19 @@ export enum LogLevel {
     Info,
     Debug,
     Warn,
-    Error
+    Error,
+}
+
+export interface ILogger {
+    setIsEnabled(value: boolean): void;
+    log(obj?: object | string | number, level?: LogLevel): void;
 }
 
 @singleton()
-export class Logger {
-    public isEnabled: boolean;
+export class Logger implements ILogger {
+    private isEnabled: boolean;
+    
+    public setIsEnabled(value: boolean): void { this.isEnabled = value; }
 
     public log(obj?: object | string | number, level: LogLevel = LogLevel.Info): void {
         if(!this.isEnabled) {

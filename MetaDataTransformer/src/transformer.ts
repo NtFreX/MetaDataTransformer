@@ -6,6 +6,7 @@ import { AccessModifier } from './reflection';
 //TODO: interfaces and union types? partial types?
 //TODO: method decleartions? constructor declarations? further stuff?
 //TODO: why can property declearation name be null or empty?
+// TODO: autoimport polyfill and container for tests?
 
 //TODO: correct build output (Emited files:, )
 //TODO: fix build warnings

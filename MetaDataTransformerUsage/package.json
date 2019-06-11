@@ -20,9 +20,8 @@
         "clean:package_lock": "if exist package-lock.json del -f -q package-lock.json",
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "clean:coverage": "if exist coverage rmdir coverage /q /s",
-        "test": "npm run build:main && npm run restore && npm run test:build && npm run test:build:post && npm run test:start",
+        "test": "npm run build:main && npm run restore && npm run test:build && npm run test:start",
         "test:build": "cd ./../MetaDataTransformer && npm start -- -v build --env=test --root-dir=\"./../MetaDataTransformerUsage\"",
-        "test:build:post": "npx replace \"require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\)\" \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
         "test:start": "jest .test.js"
     },
     "dependencies": {

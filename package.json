@@ -15,8 +15,8 @@
         "test:prepare:main": "cd ./MetaDataTransformer/ && npm run build",
         "test:prepare:app": "cd ./MetaDataTransformerUsage/ && npm run build",
         "test:build": "npm run test:build:main && npm run test:build:app",
-        "test:build:main": "cd ./MetaDataTransformer/ && npm run test:build && npm run test:build:post",
-        "test:build:app": "cd ./MetaDataTransformerUsage/ && npm run test:build && npm run test:build:post",
+        "test:build:main": "cd ./MetaDataTransformer/ && npm run test:build",
+        "test:build:app": "cd ./MetaDataTransformerUsage/ && npm run test:build",
         "test:start": "jest .test.js"
     },
     "devDependencies": {

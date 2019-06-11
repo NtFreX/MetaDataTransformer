@@ -1,4 +1,3 @@
-import '@types/jest'; // tslint:disable-line:no-import-side-effect -> vscode code completion
 import { reflection, AccessModifier } from '../src/reflection';
 
 class SimpleType { }

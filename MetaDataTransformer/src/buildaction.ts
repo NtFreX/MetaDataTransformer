@@ -8,7 +8,7 @@ import {
 import { injectable, inject } from 'tsyringe';
 
 import { IBuildOptions, ITranspiler } from "./transpiler";
-import { Logger } from './logger';
+import { ILogger } from './logger';
 
 @injectable()
 export class BuildAction extends CommandLineAction {
@@ -31,7 +31,7 @@ export class BuildAction extends CommandLineAction {
 
     public constructor(
         @inject('ITranspiler') private transpiler: ITranspiler,
-        private logger: Logger) {
+        @inject('ILogger') private logger: ILogger) {
         super({
             actionName: 'build',
             documentation: 'Transpiles the given typescript files',
@@ -46,13 +46,13 @@ export class BuildAction extends CommandLineAction {
         {
             emitDecoratorMetadata: this._emitDecoratorMetadata.value,
             experimentalDecorators: this._experimentalDecorators.value,
+            include:  [ ...this._include.values ],
             inlineSourceMap: this._inlineSourceMap.value,
             mapRoot: this._mapRoot.value,
             module: this._module.value,
             moduleResolution: this._moduleResolution.value,
             outDir: this._outDir.value,
             outFile: this._outFile.value,
-            include:  [ ...this._include.values ],
             rootDir: this._rootDir.value,
             sourceMap: this._sourceMap.value,
             sourceRoot: this._sourceRoot.value,

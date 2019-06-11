@@ -3,27 +3,29 @@ import '../polyfill';
 import { container } from 'tsyringe';
 
 import { resetContainer } from '../container';
-import { ITranspiler } from '../src/transpiler';
 import { CommandLine } from '../src/commandline';
+import { ITranspiler } from '../src/transpiler';
+import { ILogger } from '../src/logger';
 
 beforeEach(() => {
     resetContainer();
 });
 
-describe('BuildAction', () => { 
+describe('CommandLine', () => { 
     describe('execute', () => {
-        it('should call the build method of the transpiler with undefined as the default environment', () => {
-            const build = jest.fn();
-            const transpiler: ITranspiler = { build: build, emit: jest.fn() };
+        it('should disable the logger by default', () => {
+            const transpiler: ITranspiler = { build: jest.fn(), emit: jest.fn() };
+            const logger: ILogger = { log: jest.fn(), setIsEnabled: jest.fn() };
             const commandLine = container
+                .register('ILogger', { useValue: logger })
                 .register('ITranspiler', { useValue: transpiler })
                 .resolve(CommandLine);
-            
+
             // act
             commandLine.execute([ 'build' ]);
 
             // assert
-            expect(build.mock.calls[0][0]).toBe(undefined);
+            expect(logger.setIsEnabled).toHaveBeenCalledWith(false);
         });
     });
 });

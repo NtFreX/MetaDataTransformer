@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 
-import { injectable } from 'tsyringe';
+import { injectable, inject } from 'tsyringe';
 import { isNullOrUndefined } from 'util';
 
 import { IBuildOptions } from './transpiler';
-import { Logger, LogLevel } from './logger';
+import { ILogger, LogLevel } from './logger';
 
 export interface IConfigProvider { 
     get(env: string, options: IBuildOptions): IBuildOptions;
@@ -14,7 +14,7 @@ export interface IConfigProvider {
 @injectable()
 export class ConfigProvider implements IConfigProvider {
 
-    public constructor(private logger: Logger) { }
+    public constructor(@inject('ILogger') private logger: ILogger) { }
 
     public get(env: string, options: IBuildOptions): IBuildOptions {
         const fileName = this.resolveConfigFile(env, options.rootDir);
@@ -28,7 +28,7 @@ export class ConfigProvider implements IConfigProvider {
         const newOptions: IBuildOptions = {
             ...options,
             ...content.compilerOptions,
-            include: isNullOrUndefined(content.include) ? options.include : content.include
+            include: isNullOrUndefined(content.include) ? options.include : content.include,
         }
         
         return newOptions;
@@ -47,7 +47,8 @@ export class ConfigProvider implements IConfigProvider {
                 this.logger.log('No configuration file found', LogLevel.Debug);
                 return null;
             }
-            this.logger.log(`Config file "${fileNamePrefix + fileName}" not found. Defaulting to "${fileNamePrefix + defaultFileName}"`, LogLevel.Debug);
+            this.logger.log(`Config file "${fileNamePrefix + fileName}" not found`);
+            this.logger.log(`Defaulting to "${fileNamePrefix + defaultFileName}"`, LogLevel.Debug);
             fileName = defaultFileName;
         }
         this.logger.log(`Config file "${fileNamePrefix + fileName}" found`);
