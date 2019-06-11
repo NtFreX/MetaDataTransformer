@@ -18,7 +18,7 @@ export class ConfigProvider implements IConfigProvider {
 
     public get(env: string, options: IBuildOptions): IBuildOptions {
         const fileName = this.resolveConfigFile(env, options.rootDir);
-        if(fileName === null) {
+        if(isNullOrUndefined(fileName)) {
             return options;
         }
 
