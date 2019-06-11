@@ -1,10 +1,25 @@
+import '../polyfill';
+import { resetContainer } from '../container';
+
 import '@types/jest'; // tslint:disable-line:no-import-side-effect -> vscode code completion
-import "reflect-metadata";
+
 import { container } from "tsyringe";
 
-import { transformers, emptyCancellationToken, Transpiler, ITypescriptService, IGlobService, BuildOptions } from '../src/transpiler';
+import { transformers, emptyCancellationToken, Transpiler, IBuildOptions } from '../src/transpiler';
 import { metadataTransformer } from '../src/transformer';
-import { Logger } from '../src/logger';
+import { IConfigProvider } from '../src/configprovider';
+
+jest.mock('typescript');
+jest.mock('glob');
+jest.mock('fs');
+
+import * as glob from 'glob';
+import * as typescript from 'typescript';
+
+beforeEach(() => {
+    resetContainer();
+    jest.resetAllMocks();
+});
 
 describe('transpiler', () => {
     describe('transformers configuration', () => {
@@ -37,40 +52,40 @@ describe('transpiler', () => {
 
     describe('build', () => {
         it('should call ts.createCompilerHost', () => {
-            const typescriptService: ITypescriptService = { createCompilerHost: jest.fn(), createProgram: jest.fn() };
-            const globService: IGlobService = { sync: jest.fn() };
-            const buildOptions: BuildOptions = { pattern: '' };
-            const logger = container.resolve(Logger);
-            const transpiler = new Transpiler(logger, typescriptService, globService);
+            const buildOptions: IBuildOptions = { include: [ '' ] };
+            const configProvider: IConfigProvider = { get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), resolveConfigFile: jest.fn() };
+            const transpiler = container
+                .register('IConfigProvider', { useValue: configProvider })
+                .resolve(Transpiler);
 
-            transpiler.build(buildOptions);
+            transpiler.build(null, buildOptions);
 
-            expect(typescriptService.createCompilerHost).toHaveBeenCalledTimes(1);
+            expect(typescript.createCompilerHost).toHaveBeenCalledTimes(1);
         });
 
         it('should call ts.createProgram', () => {
-            const typescriptService: ITypescriptService = { createCompilerHost: jest.fn(), createProgram: jest.fn() };
-            const globService: IGlobService = { sync: jest.fn() };
-            const buildOptions: BuildOptions = { pattern: '' };
-            const logger = container.resolve(Logger);
-            const transpiler = new Transpiler(logger, typescriptService, globService);
+            const buildOptions: IBuildOptions = { include: [ '' ] };
+            const configProvider: IConfigProvider = { get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), resolveConfigFile: jest.fn() };
+            const transpiler = container
+                .register('IConfigProvider', { useValue: configProvider })
+                .resolve(Transpiler);
 
-            transpiler.build(buildOptions);
-
-            expect(typescriptService.createProgram).toHaveBeenCalledTimes(1);
+            transpiler.build(null, buildOptions);
+            
+            expect(typescript.createProgram).toHaveBeenCalledTimes(1);
         });
 
         it('should call glob.sync with given pattern', () => {
-            const typescriptService: ITypescriptService = { createCompilerHost: jest.fn(), createProgram: jest.fn() };
-            const globService: IGlobService = { sync: jest.fn() };
-            const pattern = '/src/**/*.ts';
-            const buildOptions: BuildOptions = { pattern: pattern };
-            const logger = container.resolve(Logger);
-            const transpiler = new Transpiler(logger, typescriptService, globService);
+            const pattern = '/src/**///*.ts';
+            const buildOptions: IBuildOptions = { include: [ pattern ] };
+            const configProvider: IConfigProvider = { get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), resolveConfigFile: jest.fn() };
+            const transpiler = container
+                .register('IConfigProvider', { useValue: configProvider })
+                .resolve(Transpiler);
 
-            transpiler.build(buildOptions);
+            transpiler.build(null, buildOptions);
 
-            expect(globService.sync).toHaveBeenCalledWith(pattern, { root: undefined });
+            expect(glob.sync).toHaveBeenCalledWith(pattern, { root: undefined });
         });
     });
 });

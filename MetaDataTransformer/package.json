@@ -7,7 +7,8 @@
         "glob": "^7.1.4",
         "typescript": "3.x",
         "tsyringe": "^3.2.0",
-        "reflect-metadata": "^0.1.13"
+        "reflect-metadata": "^0.1.13",
+        "fs": "^0.0.1-security"
     },
     "devDependencies": {
         "@types/jest": "^24.0.13",
@@ -15,7 +16,7 @@
         "replace": "^1.1.0"
     },
     "scripts": {
-        "start": "node dist/executable-index.js",
+        "start": "node dist/src/cli.js",
         "rebuild": "npm run clean && npm run build",
         "build": "npm run restore && tsc",
         "restore": "npm install",
@@ -26,12 +27,12 @@
         "clean:test_out": "if exist test_out rmdir test_out /q /s",
         "clean:coverage": "if exist coverage rmdir coverage /q /s",
         "test": "npm run build && npm run test:build && npm run test:build:post && npm run test:start",
-        "test:build": "npm start -- -v build --pattern=\"/test/**/*.ts\" --root-dir=\".\" --out-dir=\"./test_out\" --source-map --inline-source-map --types=node --types=jest --type-roots=\"./node_modules/@types\" --emit-decorator-metadata --experimental-decorators",
+        "test:build": "npm start -- -v build --env=test",
         "test:build:post": "npx replace \"require\\([\\'\\\"\\\"]\\@[tT][yY][pP][eE][sS]\\/[a-zA-Z]+[\\'\\\"\\\"]\\)\" \"/* typereference */\" -r --include=\"test_out/**/*.test.js\"",
         "test:start": "jest .test.js"
     },
-    "main": "./dist/index.js",
+    "main": "./dist/src/export.js",
     "bin": {
-        "custom": "./dist/executable-index.js"
+        "custom": "./dist/src/cli.js"
     }
 }

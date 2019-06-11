@@ -1,5 +1,5 @@
 // public api exports
 
-import "reflect-metadata"
+import "../polyfill";
 
 export * from "./reflection";

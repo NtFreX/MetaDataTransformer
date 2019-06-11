@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./../MetaDataTransformerUsage/test_out",
+        "target": "ES2015",
+        "moduleResolution": "node",
+        "inlineSourceMap": true,
+        "types": [ "node", "jest" ],
+        "typeRoots": [ "./../MetaDataTransformerUsage/node_modules/@types" ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "include": [
+        "/test/**/*.ts"
+    ]
+}

@@ -1,21 +1,32 @@
-import { injectable, singleton } from "tsyringe";
+import { singleton } from "tsyringe";
 
-export class ConsoleService {
-    public log(obj?: string | number | object): void {
-        console.log(obj);
-    }
+export enum LogLevel {
+    Info,
+    Debug,
+    Warn,
+    Error
 }
 
-@injectable()
 @singleton()
 export class Logger {
     public isEnabled: boolean;
 
-    constructor(private consoleService: ConsoleService) { }
+    public log(obj?: object | string | number, level: LogLevel = LogLevel.Info): void {
+        if(!this.isEnabled) {
+            return;
+        }
 
-    public log(obj?: object | string | number): void {
-        if(this.isEnabled) {
-            this.consoleService.log(obj);
+        if(level === LogLevel.Info) {
+            console.info(obj);
+        } else if(level === LogLevel.Debug) {
+            console.debug(obj);
+        } else if(level === LogLevel.Warn) {
+            console.warn(obj);
+        } else if(level === LogLevel.Error) {
+            console.error(obj);
+        }
+        else {
+            throw 'Unknown loglevel';
         }
     }
 }
