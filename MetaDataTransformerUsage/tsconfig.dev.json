@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./../MetaDataTransformerUsage/dist",
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "target": "ES2015",
+        "sourceMap": true,
+        "types": [ "node" ],
+        "typeRoots": [ "./../MetaDataTransformerUsage/node_modules/@types" ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "include": [
+        "/src/**/*.ts"
+    ]
+}

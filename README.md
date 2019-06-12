@@ -16,10 +16,11 @@ This project is not stable and there are no plans to support the same features a
 
 *   node js
 
-## How to run
+## How to run the sample application
 
+*   Run `npm run test` to restore, build and test all files.
 *   Open the path "MetaDataTransformer/MetaDataTransformerUsage" in a command line terminal
-*   Run `npm run pack`
+*   Run `npm run pack` to build a js bundle for the test.html file
 *   Open "MetaDataTransformer/MetaDataTransformerUsage/test.html" in a browser and take a look at the console output
 
 ## CLI
@@ -37,8 +38,10 @@ Optional arguments:
   -h, --help     Show this help message and exit.
   -v, --verbose  Show extra logging detail
   
-usage: tsca build [-h] [--inline-source-map] --pattern PATTERN
-                  [--out-dir OUTDIR] [--out-file OUTFILE] [--root-dir ROOTDIR]
+usage: tsca build [-h] [--env ENV] [--emit-decorator-metadata]
+                  [--experimental-decorators] [--inline-source-map]
+                  [--include INCLUDE] [--out-dir OUTDIR] [--out-file OUTFILE]
+                  [--root-dir ROOTDIR]
                   [--module {None,CommonJS,AMD,UMD,System,ES2015,ESNext}]
                   [--module-resolution {Classic,NodeJs}]
                   [--target {ES3,ES5,ES2015,ES2016,ES2017,ES2018,ESNext,JSON,Latest}]

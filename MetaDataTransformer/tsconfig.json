@@ -1,18 +1,6 @@
 {
     "compilerOptions": {
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "target": "es6",
-      "outDir": "./dist",
-      "sourceMap": true,
-      "declaration": true,
-      "types": [ "node" ],
-      "typeRoots": [ "./node_modules/@types" ]
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+        "moduleResolution": "node",
+        "experimentalDecorators": true
+    }
 }
