@@ -11,14 +11,14 @@ export class MockFileStream {
     }
 
     public existsSync(file: string): boolean {
-        return this.mockedFiles.some(f => f.name === file);
+        return this.mockedFiles.some((f: IFile) => f.name === file);
     }
 
     public readFileSync(file: string): string {
         if(!this.existsSync(file)) {
-            throw 'File not found';
+            throw "File not found";
         }
 
-        return this.mockedFiles.find(f => f.name === file).content;
+        return this.mockedFiles.find((f: IFile) => f.name === file).content;
     }
 }

@@ -1,4 +1,4 @@
-import './polyfill';
+import './polyfill'; // tslint:disable-line:no-import-side-effect
 import { resetContainer } from './container';
 
 beforeEach(() => {
