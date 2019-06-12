@@ -125,7 +125,7 @@ export class Transpiler implements ITranspiler {
 
     private toDiagnosticMessage(diagnostic: ts.Diagnostic): string {
         if (!isNullOrUndefined(diagnostic.file)) {
-            const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+            const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
             const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
             return `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`;
         }

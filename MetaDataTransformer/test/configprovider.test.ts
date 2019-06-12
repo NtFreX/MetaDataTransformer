@@ -7,24 +7,17 @@ import { IBuildOptions } from '../src/transpiler';
 import { MockFileStream } from './mocks/filestream';
 
 /*export const mockWithType = <T>(module: string, mockModule: string, mockType: string): T => {
-    console.warn('mockWithType');
-
-    jest.mock(module, () => {
-        console.warn('jest.mock');
+    jest.doMock(module, () => {
         const mock = require(mockModule);
-        console.warn(mock);
-        console.warn(mock[mockType]);
-        console.warn(new mock[mockType]());
         return new mock[mockType]();
     });
-    console.warn(jest.requireMock(module) as T);
     return jest.requireMock(module) as T;
 };
 
 const fs = mockWithType<MockFileStream>('fs', './mocks/filestream', 'MockFileStream');*/
 
 jest.mock('fs', () => {
-    const mock = require('./mocks/filestream');
+    const mock = require('./mocks/filestream'); // tslint:disable-line:no-var-requires
     return new mock.MockFileStream();
 });
 const fs: MockFileStream = jest.requireMock('fs');

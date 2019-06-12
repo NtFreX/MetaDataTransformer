@@ -18,8 +18,9 @@ This project is not stable and there are no plans to support the same features a
 
 ## How to run the sample application
 
+*   Run `npm run test` to restore, build and test all files.
 *   Open the path "MetaDataTransformer/MetaDataTransformerUsage" in a command line terminal
-*   Run `npm run restore` and `npm run pack`
+*   Run `npm run pack` to build a js bundle for the test.html file
 *   Open "MetaDataTransformer/MetaDataTransformerUsage/test.html" in a browser and take a look at the console output
 
 ## CLI
