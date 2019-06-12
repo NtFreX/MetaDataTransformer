@@ -1,5 +1,3 @@
-import * as ts from 'typescript';
-
 import { 
     CommandLineStringParameter, 
     CommandLineAction, 
@@ -7,12 +5,16 @@ import {
     CommandLineFlagParameter, 
     CommandLineStringListParameter} from '@microsoft/ts-command-line';
 
-import { build, emit, BuildOptions } from "./transpiler";
-import { Logger } from './logger';
+import { injectable, inject } from 'tsyringe';
 
+import { IBuildOptions, ITranspiler } from "./transpiler";
+import { ILogger } from './logger';
+
+@injectable()
 export class BuildAction extends CommandLineAction {
+    private _environment: CommandLineStringParameter;
     private _inlineSourceMap: CommandLineFlagParameter;
-    private _pattern: CommandLineStringParameter;
+    private _include: CommandLineStringListParameter;
     private _outDir: CommandLineStringParameter;
     private _outFile: CommandLineStringParameter;
     private _rootDir: CommandLineStringParameter;
@@ -24,26 +26,33 @@ export class BuildAction extends CommandLineAction {
     private _mapRoot: CommandLineStringParameter;
     private _types: CommandLineStringListParameter;
     private _typeRoots: CommandLineStringListParameter;
+    private _emitDecoratorMetadata: CommandLineFlagParameter;
+    private _experimentalDecorators: CommandLineFlagParameter;
 
-    public constructor() {
-      super({
-        actionName: 'build',
-        documentation: 'Transpiles the given typescript files',
-        summary: 'Transpiles the given typescript files',
-      });
+    public constructor(
+        @inject('ITranspiler') private transpiler: ITranspiler,
+        @inject('ILogger') private logger: ILogger) {
+        super({
+            actionName: 'build',
+            documentation: 'Transpiles the given typescript files',
+            summary: 'Transpiles the given typescript files',
+        });
     }
-   
+
     protected onExecute(): Promise<void> {
         const start = new Date();
-        const options: BuildOptions = 
+
+        const options: IBuildOptions = 
         {
+            emitDecoratorMetadata: this._emitDecoratorMetadata.value,
+            experimentalDecorators: this._experimentalDecorators.value,
+            include:  [ ...this._include.values ],
             inlineSourceMap: this._inlineSourceMap.value,
             mapRoot: this._mapRoot.value,
             module: this._module.value,
             moduleResolution: this._moduleResolution.value,
             outDir: this._outDir.value,
             outFile: this._outFile.value,
-            pattern: this._pattern.value,
             rootDir: this._rootDir.value,
             sourceMap: this._sourceMap.value,
             sourceRoot: this._sourceRoot.value,
@@ -51,50 +60,42 @@ export class BuildAction extends CommandLineAction {
             typeRoots: [ ...this._typeRoots.values ],
             types: [ ...this._types.values ],
         };
+        const program = this.transpiler.build(this._environment.value, options);
+        this.transpiler.emit(program);
 
-        Logger.log(`BuildOptions: '${JSON.stringify(options)}'`);
-
-        const program = build(options);
-        const result = emit(program);
-
-        if(result.emitSkipped) {
-            Logger.log('Emit has been skiped');
-        } else {
-            Logger.log('Emited files:')
-            Logger.log(result.emittedFiles);
-        }
-
-        result.diagnostics.forEach(diagnostic => {
-            switch(diagnostic.category) {
-                case ts.DiagnosticCategory.Error:
-                    console.error(diagnostic.messageText);
-                    break;
-                    case ts.DiagnosticCategory.Warning:
-                        console.warn(diagnostic.messageText);
-                        break;
-                    default:
-                        console.log(diagnostic.messageText);
-                        break;
-            }
-        });
-        
         const end = new Date().getTime() - start.getTime();
-        console.info("Execution time: %dms", end);
+        this.logger.log(`Execution time: ${end}ms`);
 
         return Promise.resolve();
     }
    
     protected onDefineParameters(): void {     
+        this._environment = this.defineStringParameter({
+            argumentName: "ENV",
+            description: 'The environment',
+            parameterLongName: '--env',
+            required: false,
+        });
+        this._emitDecoratorMetadata = this.defineFlagParameter({
+            description: 'Should emit decorator metadata',
+            parameterLongName: '--emit-decorator-metadata',
+            required: false,
+        });
+        this._experimentalDecorators = this.defineFlagParameter({
+            description: 'Should allow experimental decorators',
+            parameterLongName: '--experimental-decorators',
+            required: false,
+        });
         this._inlineSourceMap = this.defineFlagParameter({
             description: 'Should create inline source maps',
             parameterLongName: '--inline-source-map',            
             required: false,
         });
-        this._pattern = this.defineStringParameter({
-            argumentName: "PATTERN",
-            description: 'The pattern which is used to locate the files to transpile',
-            parameterLongName: '--pattern',            
-            required: true,
+        this._include = this.defineStringListParameter({
+            argumentName: "INCLUDE",
+            description: 'The files to transpile',
+            parameterLongName: '--include',            
+            required: false,
         });
         this._outDir = this.defineStringParameter({
             argumentName: "OUTDIR",
@@ -123,7 +124,7 @@ export class BuildAction extends CommandLineAction {
         });
         this._moduleResolution = this.defineChoiceParameter({
             alternatives: [ 'Classic', 'NodeJs' ],
-            defaultValue: 'Classic',
+            defaultValue: undefined,
             description: 'The module',
             parameterLongName: '--module-resolution',
             required: false,

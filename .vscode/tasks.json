@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "npm:test:prepare",
+            "type": "npm",
+            "script": "test:prepare"
+        },
+        {
+            "label": "npm:test:build",
+            "type": "npm",
+            "script": "test:build",
+            "dependsOn": "npm:test:prepare"
+        }
+    ]
+}

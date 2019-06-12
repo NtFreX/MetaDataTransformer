@@ -1,18 +1,26 @@
 import { CommandLineParser, CommandLineFlagParameter } from '@microsoft/ts-command-line';
+import { injectable, inject } from 'tsyringe';
 
-import { Logger } from './logger';
+import { ILogger } from './logger';
 import { BuildAction } from './buildaction';
 
+export interface ICommandLine {
+    execute(argument: string[]): void;
+}
+
+@injectable()
 export class CommandLine extends CommandLineParser {
     private _verbose: CommandLineFlagParameter; 
    
-    public constructor() {
+    public constructor(
+        @inject('ILogger') private logger: ILogger, 
+        buildAction: BuildAction) {
         super({
             toolDescription: 'Typescript transpiler with reflection capabilities.',
             toolFilename: 'tsca',
         });
 
-        this.addAction(new BuildAction());
+        this.addAction(buildAction);
     }
    
     protected onDefineParameters(): void {
@@ -24,7 +32,7 @@ export class CommandLine extends CommandLineParser {
     }
    
     protected onExecute(): Promise<void> {
-        Logger.isEnabled = this._verbose.value;
+        this.logger.setIsEnabled(this._verbose.value);
 
         return super.onExecute();
     }

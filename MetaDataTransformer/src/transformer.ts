@@ -6,10 +6,14 @@ import { AccessModifier } from './reflection';
 //TODO: interfaces and union types? partial types?
 //TODO: method decleartions? constructor declarations? further stuff?
 //TODO: why can property declearation name be null or empty?
+// TODO: autoimport polyfill and container for tests?
 
-//TODO: flatten tsc output
-//TODO: npm install should not add it 's binaries to the top level folder but into node_modules/bin? because of --prefix
+//TODO: rebuild only given file when hitting f5 (launch.config)
+//TODO: do not restore every time, make restore manuell
+//TODO: support tsconfig extends
 //TODO: correct build output (Emited files:, )
+//TODO: fix build warnings
+//TODO: fix problem window problems
 
 interface PropertyDeclaration {
     name: string;
