@@ -1,23 +1,17 @@
-import '../polyfill';
+import '../test.setup'; // tslint:disable-line:no-import-side-effect
 
 import { container } from "tsyringe";
 
 import { transformers, emptyCancellationToken, Transpiler, IBuildOptions } from '../src/transpiler';
 import { metadataTransformer } from '../src/transformer';
 import { IConfigProvider } from '../src/configprovider';
-import { resetContainer } from '../container';
 
 jest.mock('typescript');
 jest.mock('glob');
 jest.mock('fs');
 
-import * as glob from 'glob';
 import * as typescript from 'typescript';
-
-beforeEach(() => {
-    resetContainer();
-    jest.resetAllMocks();
-});
+import * as glob from 'glob';
 
 describe('transpiler', () => {
     describe('transformers configuration', () => {
@@ -52,7 +46,7 @@ describe('transpiler', () => {
         beforeEach(() => {
             const configProvider: IConfigProvider = { 
                 get: jest.fn((_: string, options: IBuildOptions): IBuildOptions => options), 
-                resolveConfigFile: jest.fn() 
+                resolveConfigFile: jest.fn(),
             };
             
             container.register('IConfigProvider', { useValue: configProvider });

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import "../polyfill";
-import "../container";
+import "../polyfill";  // tslint:disable-line:no-import-side-effect
+import "../container"; // tslint:disable-line:no-import-side-effect
 
 import { ICommandLine } from "./commandline";
 import { container } from "tsyringe";

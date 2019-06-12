@@ -10,7 +10,7 @@ const setupContainer = () => {
         .register('IConfigProvider', { useClass: ConfigProvider })
         .register('ITranspiler', { useClass: Transpiler })
         .register('ICommandLine', { useClass: CommandLine })
-        .register('ILogger', { useClass: Logger });
+        .registerSingleton('ILogger', Logger);
 };
 export const resetContainer = () => {
     container.reset();

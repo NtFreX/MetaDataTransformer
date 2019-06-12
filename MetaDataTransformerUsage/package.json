@@ -11,7 +11,7 @@
         "rebuild": "npm run clean && npm run build",
         "build": "npm run build:main && npm run restore && npm run build:start",
         "build:main": "cd ./../MetaDataTransformer && npm run build",
-        "build:start": "cd ./../MetaDataTransformer && npm start -- -v build --root-dir=\"./../MetaDataTransformerUsage\"",
+        "build:start": "cd ./../MetaDataTransformer && npm start -- -v build --env=dev --root-dir=\"./../MetaDataTransformerUsage\"",
         "restore": "npm install && npm link .\\..\\MetaDataTransformer",
         "clean": "npm run clean:main && npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out && npm run clean:coverage",
         "clean:main": "cd ./../MetaDataTransformer && npm run clean",

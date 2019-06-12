@@ -1,13 +1,8 @@
-import '../polyfill';
+import '../test.setup'; // tslint:disable-line:no-import-side-effect
 
 import { container } from "tsyringe";
 
 import { LogLevel, ILogger } from './../src/logger';
-import { resetContainer } from '../container';
-
-beforeEach(() => {
-    resetContainer();
-});
 
 describe('Logger', () => {
     describe('log', () => {

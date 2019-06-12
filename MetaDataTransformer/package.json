@@ -17,7 +17,7 @@
     "scripts": {
         "start": "node dist/src/cli.js",
         "rebuild": "npm run clean && npm run build",
-        "build": "npm run restore && tsc",
+        "build": "npm run restore && tsc --project tsconfig.dev.json",
         "restore": "npm install",
         "clean": "npm run clean:node_modules && npm run clean:dist && npm run clean:package_lock && npm run clean:test_out && npm run clean:coverage",
         "clean:node_modules": "if exist node_modules rmdir node_modules /q /s",

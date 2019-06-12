@@ -8,6 +8,9 @@ import { AccessModifier } from './reflection';
 //TODO: why can property declearation name be null or empty?
 // TODO: autoimport polyfill and container for tests?
 
+//TODO: rebuild only given file when hitting f5 (launch.config)
+//TODO: do not restore every time, make restore manuell
+//TODO: support tsconfig extends
 //TODO: correct build output (Emited files:, )
 //TODO: fix build warnings
 //TODO: fix problem window problems

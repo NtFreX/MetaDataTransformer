@@ -1,15 +1,10 @@
-import '../polyfill';
+import '../test.setup'; // tslint:disable-line:no-import-side-effect
 
 import { container } from 'tsyringe';
 
-import { resetContainer } from '../container';
 import { CommandLine } from '../src/commandline';
 import { ITranspiler } from '../src/transpiler';
 import { ILogger } from '../src/logger';
-
-beforeEach(() => {
-    resetContainer();
-});
 
 describe('CommandLine', () => { 
     describe('execute', () => {

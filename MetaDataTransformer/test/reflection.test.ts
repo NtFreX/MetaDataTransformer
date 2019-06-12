@@ -1,3 +1,5 @@
+import '../test.setup'; // tslint:disable-line:no-import-side-effect
+
 import { reflection, AccessModifier } from '../src/reflection';
 
 class SimpleType { }

@@ -1,14 +1,9 @@
-import '../polyfill';
+import '../test.setup'; // tslint:disable-line:no-import-side-effect TODO: solve with config?
 
 import { container } from 'tsyringe';
 
-import { resetContainer } from '../container';
 import { ITranspiler } from '../src/transpiler';
 import { CommandLine } from '../src/commandline';
-
-beforeEach(() => {
-    resetContainer();
-});
 
 describe('BuildAction', () => { 
     describe('execute', () => {

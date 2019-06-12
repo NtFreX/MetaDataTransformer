@@ -1,4 +1,4 @@
-import { singleton } from "tsyringe";
+import { injectable } from "tsyringe";
 
 export enum LogLevel {
     Info,
@@ -12,7 +12,7 @@ export interface ILogger {
     log(obj?: object | string | number, level?: LogLevel): void;
 }
 
-@singleton()
+@injectable()
 export class Logger implements ILogger {
     private isEnabled: boolean;
     

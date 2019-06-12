@@ -1,14 +1,9 @@
-import '../polyfill';
+import '../test.setup'; // tslint:disable-line:no-import-side-effect
 
 import { container } from 'tsyringe';
 
-import { resetContainer } from '../container';
 import { execute } from '../src/cli';
 import { ICommandLine } from '../src/commandline';
-
-beforeEach(() => {
-    resetContainer();
-});
 
 describe('CLI', () => { 
     it('should execute of ICommandLine with all but the first two command line parameters', () => {
