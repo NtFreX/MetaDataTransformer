@@ -17,7 +17,7 @@ import { MockFileStream } from './mocks/filestream';
 const fs = mockWithType<MockFileStream>('fs', './mocks/filestream', 'MockFileStream');*/
 
 jest.mock('fs', () => {
-    const mock = require('./mocks/filestream'); // tslint:disable-line:no-var-requires
+    const mock = require('./mocks/filestream'); // tslint:disable-line:no-require-imports
     return new mock.MockFileStream();
 });
 const fs: MockFileStream = jest.requireMock('fs');
