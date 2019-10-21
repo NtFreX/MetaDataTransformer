@@ -4,7 +4,7 @@
     "dependencies": {
         "@microsoft/ts-command-line": "^4.2.7",
         "@types/node": "^12.7.3",
-        "glob": "^7.1.4",
+        "glob": "^7.1.5",
         "typescript": "3.x",
         "tsyringe": "^3.3.0",
         "reflect-metadata": "^0.1.13",
