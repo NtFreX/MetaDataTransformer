@@ -6,7 +6,7 @@
         "@types/node": "^12.12.14",
         "glob": "^7.1.4",
         "typescript": "3.x",
-        "tsyringe": "^3.3.0",
+        "tsyringe": "^4.1.0",
         "reflect-metadata": "^0.1.13",
         "fs": "^0.0.1-security"
     },
