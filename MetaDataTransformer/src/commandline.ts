@@ -1,4 +1,4 @@
-import { CommandLineParser, CommandLineFlagParameter } from '@microsoft/ts-command-line';
+import { CommandLineParser, CommandLineFlagParameter } from '@rushstack/ts-command-line';
 import { injectable, inject } from 'tsyringe';
 
 import { ILogger } from './logger';
