@@ -3,7 +3,7 @@ import {
     CommandLineAction, 
     CommandLineChoiceParameter, 
     CommandLineFlagParameter, 
-    CommandLineStringListParameter} from '@microsoft/ts-command-line';
+    CommandLineStringListParameter} from '@rushstack/ts-command-line';
 
 import { injectable, inject } from 'tsyringe';
 
