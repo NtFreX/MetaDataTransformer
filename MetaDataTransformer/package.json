@@ -2,7 +2,7 @@
     "name": "metadatatransformer",
     "version": "0.0.1",
     "dependencies": {
-        "@microsoft/ts-command-line": "^4.2.7",
+        "@microsoft/ts-command-line": "^5.0.1",
         "@types/node": "^12.12.14",
         "glob": "^7.1.4",
         "typescript": "3.x",
