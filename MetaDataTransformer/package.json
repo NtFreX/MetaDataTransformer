@@ -11,7 +11,7 @@
         "fs": "^0.0.1-security"
     },
     "devDependencies": {
-        "@types/jest": "^25.2.3",
+        "@types/jest": "^26.0.4",
         "jest": "^26.0.1"
     },
     "scripts": {
