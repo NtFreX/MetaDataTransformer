@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "dependencies": {
         "@rushstack/ts-command-line": "^4.4.0",
-        "@types/node": "^12.12.14",
+        "@types/node": "^14.0.25",
         "glob": "^7.1.6",
         "typescript": "3.x",
         "tsyringe": "^4.1.0",
