@@ -30,7 +30,7 @@
     },
     "devDependencies": {
         "@types/jest": "^25.2.3",
-        "jest": "^26.0.1",
+        "jest": "^26.2.1",
         "sorcery": "^0.10.0",
         "webpack": "^4.43.0",
         "webpack-cli": "^3.3.11",
